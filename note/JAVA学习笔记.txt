@@ -1,0 +1,1271 @@
+﻿
+学习思想：先技术，再思想。实践出真知。
+
+第一章 （面向对象没有全局函数的语义）
+1.1 抽象过程  （万物皆为对象，而程序就是对象的集合，他们通过发送消息来告知要做的操作，对象具有行为，状态，标识）
+1.2 每个对象都有一个借口 （问题空间的元素和解空间的对象之间创建一对一的映射，每个对象都只能满足某些请求，这些请求由对象的接口所定义，决定借接口的便是类型）
+1.3 每个对象都提供服务 （ 将对象想象成“服务提供者”，程序本身就是向用户提供服务，它将通过调用其他对象提供的服务来实现这一目的。）
+1.4 被隐藏的具体实现 （ 限制客户端员操作，允许库设计者改变类内部的工作方式而不影响客户端员，三个关键字protect...）
+1.5 复用的具体实现 （最简单地复用某个类的方式就是直接使用该类的一个对象，也可以将那个类的一个对象置于某个新的类中）
+1.6 继承 （基类和导出类，对象就是通过概念把数据和功能代码封装到一起，这些概念通过关键字class表示，当继承现有类型时，就创建了新的类） 
+ 1.6.1 “是一个”与“像是一个”关系 （ is-a 具有完全相同接口 like-is-a 导出类添加新的接口元素）
+1.7 伴随多态的可转换性 （ Java中默认动态绑定，把将导出类看做是它的基类的过程称为上转型）
+1.8 单根继承接口结构 （ 所有对象都有一个共同的接口）
+1.9 容器 （list用于储存序列，map关联数组，set每种对象类型只持有一个）
+ 1.9.1 参数化类型（单继承结构意味着所有的东西都是Object类型，所以可以储存Object的容器可以储存任何东西）
+1.10 对象的创建和生命期 （单继承和在堆上创建）
+1.11 异常处理：处理错误 （异常处理强制使用）
+1.12 并发编程 （ 线程只是单一处理器分配执行时间的手段，多线程共享资源，必须在使用期间上锁，使用结束后开锁）
+1.13 JAVA与Internet ()
+
+所谓的抽象语言都提供抽象机制，汇编语言是对底层机器的抽象，“命令式”语言是对汇编语言的抽象，
+我们将问题空间中的元素及其在解空间中的表示称为“对象”
+
+第一章 
+
+程序可以通过添加新类型的对象使自身适用于某个特定问题
+每个对象看起来都有点像一台微型计算机——它具有状态，还具有操作，用户可以要求对象执行这些操作。如果要对现实世界中的对象做类比，
+
+所谓对象就是真实世界的实体，相互对应，类是对象集合，对象是类的实例
+例子：
+      球{         //类
+    球 篮球=new 球（）；//篮球就是对象
+    拍（）{  }；
+    滚（）{  }；
+    踢（）{  }；
+     篮球.拍()； // 方法提供对象调用
+
+第二章 一切皆为对象
+
+因为一个static字段对于每个类来说都只有一份存储空间，而非static字段对于每个对象只有一个存储空间，但是如果static
+作用于某个方法，差别就是static方法在不创建任何对象的前提下就可以调用它。
+ 例子参见com.top.tz.test包下的TestStatic、TestS
+
+解决问题：学了包的命名规范，二重循环，基本类型的等级（根据所占存储空间大小）double=long>float=int>short=char>byte，操作符的运算优先规则,接口类书写的规范
+
+
+
+public class OutClassTest {
+    private String        o1    = "外部类的变量111";
+    private static String    o2    = "外部类的静态变量222";
+    public void outMethod()
+    {
+        System.out.println( "外部类的方法。" );
+    }
+
+/* public C c = new C();外部类根本不知道局部内部类的存在，所以访问不了 */
+
+    class InClassTest {
+        public String    i1    = "222";
+        A        a    = new A();
+        InClassTest2    test2    = new InClassTest2();
+
+/**
+         * 非静态内部类可以直接访问所有的外部类的成员
+         */
+        public void inMethod()
+        {
+            System.out.println( "非静态内部类的方法。" );
+            outMethod();
+            System.out.println( o1 );
+            System.out.println( test2.i2 );
+            System.out.println( a.a );
+        }
+    }
+
+    class InClassTest2 {
+        public String i2 = "333";
+    }
+
+    public static class A {
+        public int        a    = 10;
+        public static int    b    = 100;
+
+        /*  InClassTest inClassTest=new InClassTest(); */
+        public void aMethod()
+        {
+            System.out.println( "静态内部类的方法。" );
+            B b = new B();
+
+            /**
+             * 静态内部类可直接访问外部类的静态成员，但不能直接访问外部类的非静态成员,需要实例化
+             */
+            System.out.println( o2 );
+
+            OutClassTest outClassTest = new OutClassTest();
+            outClassTest.outMethod();
+            System.out.println( outClassTest.o1 );
+        }
+    }
+
+    public static class B {
+        public int        a    = 20;
+        public static int    b    = 200;
+    }
+
+    public void cMethod()
+    {
+        /**
+         * 局部内部类跟实例内部类一样能访问外部类的所有成员
+         * @author Administrator
+         *
+         */
+        class C {
+            private int    a    = 30;
+            public int    aa    = 300;
+        }
+    }
+
+    public static void main( String[] args )
+    {
+        OutClassTest out = new OutClassTest();
+        out.outMethod();
+
+/**
+         * 在外部类中不能直接访问内部类的成员，必须通过内部类的实例才可访问
+         */
+        OutClassTest.InClassTest test = new OutClassTest().new InClassTest();
+
+        /*
+         * 外部类中可直接访问静态内部类中的静态变量，若要访问静态内部类中非静态变量则需要实例化才行
+         */
+        System.out.println( A.b );
+
+        OutClassTest.A in = new OutClassTest.A();
+        in.a = 1000;
+        System.out.println( "" + in.a );
+    }
+}
+总结：int x=a.f();  在上述例子中，消息是否f(),对象是a,面向对象的程序设计通常归纳为”向对象发送消息“
+
+long=double>float=int>char>byte
+返回型描述的是调用方法之后从方法返回的值。参数列表给出了要传给方法的信息类型和信息。
+方法名和参数列表是唯一方法标识
+return关键字：1.做完，跳出循环；2.返回方法返回值
+反转域名com.top.tz.pageName
+static关键字，为某一特定区域分配单一存储空间，而不考虑创建对象,即不用创建对象，也能调用方法（TestStatic.staticMethodName()）
+
+
+永远不需要销毁对象，作用域（在C,C++,Java中，作用域由花括号所在的位置决定的）
+若返回类型时void，return只是用来跳出
+
+split 将一个字符串分割为子字符串，然后将结果作为字符串数组返回，在.split(".")转义字符，必须的加”\\“
+Arrays.sort( )方法一个参数默认是升序排列
+
+
+
+第三章 操作符
+
+
+
+几乎所有的操作符都只能操作基本类型，例外的操作符是"="、"=="、"+=" ,这些可以操作任何对象，String 支持“+”、“+=”
+基本类型的赋值，存储一个实际值，而非指向一个对象的引用，是直接把一个地方的内容复制到另一个对方
+用对象给对象赋值时，会出现“别名问题”，而是直接操作域的内容，ri.a=r2.a,但是这样容易导致混乱，违背原则
+“与”，“或”，“非”
+表达式中最大的数据类型决定最终数据类型
+初始化简单的理解就是实例化
+
+
+第五章  初始化与清理
+
+Boolean是基本数据类型boolean的包装类（如Integer），定义的变量可以初始化为空，但要强转型，Boolean bool =（Boolean）null，初始化方式。
+
+设计基本类型的重载：方法重载接受参数时，如果所传参数小于方法指定的参数类型小，该参数数据类型将会被提升，char型则比较特殊，不匹配，就会把char直接提为int,反之进行窄化转换（手动转型，不然编译报错）。
+方法重载区分：有无参数，参数类型，顺序不同，以返回值区分重载方法
+默认构造器为提供无参构造方法，如果类里面拥有了有参构造方法，默认构造器将不会起作用，new bird（调用无参构造器）这时会报出“没有找到匹配构造器”
+
+this关键字——————————————this只能在非静态方法中使用，this关键字只能在方法内部使用，表示对“调用方法的那个对象”的引用；当前方法中的this引用会自动应用于同一个类中的其它方法，编译器会自动帮你添加。
+（当需要明确指出对当前对象的引用时，才会使用到关键字this）如返回当前对象的返回值时
+this只能调用一个构造器，编译器禁止其他任何方法调用构造器，
+this.s=s;//参数s和数据成员s名字相同，会有歧义，所以用this.s来表示数据成员，把传进来的参数赋值给数据成员
+
+static关键字————————————static方法就是没有this方法
+Java程序的变量大体可分为成员变量和局部变量，而其局部变量又可以分为：
+形参：在方法的签名中定义的局部变量，由由方法的调用者为其赋值，随方法消亡；
+方法内的局部变量：在方法内初始
+代码块内的局部变量：在代码块内初始化
+局部变量作用时间短，都储存在方法的栈内存中；
+在类体内定义的变量称实例变量或成员变量，加上static修饰后称静态变量或类变量。
+Java中定义成员变量时，是没有前后之分的，但必须采用合法的前向引用（int sum2=sum1+10；int sum2=33;）,但如果sum2加上static时称为类变量时，编译成功，因为
+类变量初始在实例变量之前。
+静态数据的初始化：静态数据只占用一份存储区域（共享同一块内存空间），只作用于域，不作用于局部变量。static修饰全局变量，我们可以通过局部变量赋值给全局变量，进行初始化。
+枚举类型，由于枚举类型的实例是常量，惯用大写命名方式
+
+
+第六章  访问权限的控制
+
+
+import和package关键字允许，只是将单一的全局名字空间分隔开，
+创建一个独一无二的包名；package的第一个名字一般是Internet域名的反顺序，因为这个独一无二，
+public，protect（继承访问权限），super关键字，super.成员变量，super.父类方法，子类调用父类的方法或成员变量，super只能作用于上一层父类；
+private（仅供保护该成员的类）
+
+
+第七章 复用类 
+
+
+final 修饰数据变量，方法，类 ，隐蔽使用，防止修改
+extends 继承
+
+
+第八章 多态
+    JDK 包括java的开发环境，java工具，java的基本类库。
+  jdk1.7 运用List<String> list=new ArrayList<>();即泛型实例化类型自动推断，空指针安全。两个char之间的equals.
+  枚举类 enum 
+  通常我们在java中定义常量值，使用public final static类型来定义，java中的枚举类型采用关键字enum来定义，从jdk1.5才有的类型
+  枚举类型提供了构造函数，我们可以通过构造函数和覆写tostring方法来实现，这样我们就可以为每个枚举类型的值通过构造函数传入对应的参数。
+  java是单继承，enum已经继承了Enum类，enumMap的KEY是enum，value是object对象。
+   在子类的main方法调用父类的static方法，可以直接单独写方法名+参数（或无参），而不使用（类名.静态方法（））
+   
+///1.方法调用绑定，产生正确的行为
+方法调用绑定：    C只有一种方法调用，就是前期绑定（在程序执行前进行绑定）。
+   将一个方法调用同一个方法主题关联起来被称作绑定。前期绑定和后期后期绑定（在运行时根据对象进行绑定）。
+   如果一种语言想要实现后期绑定，就需要某种机制，以便在运行时能判断对象类型，从而调用恰当的方法。也就是说，
+   编译器一直不知道对象的类型，但是方法调用机制能找到正确的方法体，并加以调用。
+   java中除了static方法和final方法（private方法属于final方法）之外，其他所有的方法都是后期绑定
+   为什么要将某个方法声明为final，不仅是可以防止其他人覆盖该方法，更重要的是关闭动态绑定。
+   编写只基类打交道的代码，导出类都可以正常运行，换句话，发送消息给某个对象，让对象去断定应该做什么事。
+   
+   上转型:shape s=new Circle();这里创建一个Circle对象，并把得到的引用立即赋值给Shape,这样做看似错误（将一种类型赋值给另一种类型）；
+   但实际上是没问题的，因为通过继承，Circle就是一种shape。编译器会认可这条语句。
+   假设你调用一个基类方法（它在导出类中被覆盖）：
+   s.draw();Shape基类为自它那里继承而来的所有导出类建立一个公用接口——也就是说，所有形状都可以描绘和擦除。导出类通过覆盖这些定义，来实现单独的行为。
+   这个吧时候，我们得到的对象类型是Shape,一个通用Shape引用，而Shape s=new Circle();\\\{会把circle的引用赋值给s,两个引用公用一个内存地址。}
+   编译器不需要获得任何特殊信息就能进行正确的调用。对draw（）方法的所有调用都是通过动态绑定进行的。
+///2.可扩展性
+   一个设计良好的OOP程序中，都只与基类接口通信，这样程序是可扩展的，因为可以通过通用的基类继承出新的数据类型，从而新添一些功能。那些操作基类接口的方法不需要任何改动就可以应用于新类。
+   private方法被自动认为是final方法，而且对导出类是屏蔽的。
+///3.缺陷：域和静态方法
+   只有普通的方法调用可以是多态的。例如，如果你直接访问某个域，这个访问就将在编译器进行解析，
+   class Super{
+    float i=0;//这个变量的作用域
+   }
+   class Sub extends Super{
+   float i=1;//不可以重写，失去了多态特征
+   public float getSuperi(){retrun super.i}//调用父类的成员变量，需要super关键字指明。
+   }
+   Super sub=new Sub();
+   当sub对象转型为super引用时，任何域访问操作都将由编译器解析，因此不是多态的。方法被子类重写，父类的方法将被隐蔽起来。   
+
+   ///4.构造器和多态 
+   构造器并不具备多态性，但还是非常有必要理解 构造器怎样通过多态在复杂的层次结构中运作；
+   基类的构造器总是在导出类的构造过程中被调用，而且按照继承层次逐渐向上连接，以使每个基类的构造器都能得到调用;
+   调用顺序：
+   1.调用基类构造器。
+   2.按声明顺序调用成员的初始化方法。
+   3.调用导出类构造器的主题。
+	java中的string.trim（）函数的使用，去掉字符串的首尾空格。
+	P305
+	
+	///5.用继承进行设计
+	当我们使用现成的类来建立新类是，如果先考虑使用继承技术，反而会加重我们的设计负担
+	
+final ,static,private
+静态方法不具备多态性，
+java中构造方法的调用顺序：
+（1）在其他任何事物发生之前，将分配给对象的存储空间初始化成二进制0； 
+（2）调用基类构造函数。从根开始递归下去，因为多态性此时调用子类覆盖后的draw()方法（要在调用RoundGlyph构造函数之前调用），由于步骤1的缘故，我们此时会发现radius的值为0； 
+（3）按声明顺序调用成员的初始化方法； （
+  4）最后调用子类的构造函数。
+
+
+多态不能单独分析，要运用数据抽象和继承来表现，与其它特性协同工作
+把对某种对象的引用视为基类型的引用称为上转型(Paret p=new son();声明的是父类的引用，但是执行的过程中调用的是子类的对象，程序首先寻找子类对象的method方法，
+但是没有找到，于是向上转型去父类寻找)
+private方法是final方法，对导出类是屏蔽的，不可见所以不会被重载。
+
+
+第九章 接口
+
+！复用代码的第一种方式就是遵循接口来编写自己的类
+1.高度解耦 implements Base  turn to Base
+2.java多继承//在打算组合不同的接口时接口中的方法同名时将会造成混淆，尽量避免这样的情况。
+
+策略设计模式：你可以用任何你想要的对象来调用我，只要你的对象遵循我的接口。
+
+当继承抽象方法的过程中，子类的方法对父类方法重写时，要保证参数一样，不然会报错，当子类加上abstract时，方法被隐蔽，
+就不会发生重写，但在main()中时会报错，要重写父类play()；
+
+接口和内部类提供了一种将接口和实现分离的更加结构化的方法，接口最迷人的地方就是允许同一个接口具有不同的实现
+
+interface关键字会建立一个完全抽象的类，它允许创建者确定方法名，参数列表，返回类型，但没有热河方法体，也就是它只提供了方法名，不实现任何操作
+implement 则是对interface的具体实现 接口可以实现多继承，通过多继承来扩展接口
+在打算组合的接口中使用相同的方法名会照成代码可读性混淆，请避免
+在工厂的对象上调用的是创建方法，而工厂对象将生成接口的实现对象
+
+
+第十章 内部类
+
+
+可以将一个类的定义放在另一个类的定义内部，叫内部类，内部类是一种特性，你可以将逻辑相关的类组织在一起，并控制内部类的可视性。
+在外部类的方法任意位置创建内部类对象，必须在main()中具体指明这个对象类型：Outclass.Insideclass
+内部类可以访问外围类的元素，而不需要任何特殊条件,内部类对外部类对象的引用时，紧跟.this
+
+
+第十一章 持有对象
+
+
+容器类：List,Set(元素不能重复，对每个值都只保存一个对象),
+Map（key,value）（每个key，只允许存储一次，允许某些对象与一些对象关联起来）,Query（只允许在“一 端”插入，在另外一端移除）
+
+
+第十二章 通过异常处理对象
+
+	异常可以看成一个返回机制，跳出方法或作用域
+	Exception是捕捉异常类型的基类
+	关键字throw,new个异常对象后，将会把引用给throw
+	
+	捕捉异常：理解监控区域的概念，try块 有异常可以在catch块中捕捉到，finally总能被执行
+	java中没有析构函数，但是有垃圾回收机制
+	当要把除内存之外的资源恢复到他们的初始状态时，就要用到finally字句
+	java.util.logging工具将输出记录到日志中  Logger.severe.
+	  
+	  
+	 throw new Exception() 后面的代码执行？在try块中try里面的代码报错，将不会执行下面的语句，跳到catch块处理。
+	 上层是通过Catch来捕捉异常的，通常情况一个函数的执行结果和执行状态我们会通过函数返回值的方式向上层调用者返回，但是如果碰到函数既要
+	 返回执行的结果，又要告诉调用者函数执行过程中碰到了什么问题。
+
+第十三章 字符串
+ 
+cmd命令行进行反汇编：
+  1.指定目录跳到当前.java文件的目录下
+  2.执行javac .java编译成.class文件
+  3.执行javap -c .class  打印输出
+  java *.class  (不用后面的class)运行java文件
+  
+JVM调用方法有五条指令，分别是invokestatic,invokespecial,invokevirtual,invokeinterface,invokedynamic。
+invokestatic用来调用静态方法；
+invokespecial用来调用私有方法，父类方法(super.)，类构造器方法；
+invokeinterface调用接口方法；
+invokedynamic方法动态执行；
+invokevirtual调用所有虚方法，即除了以上的方法外全用invokevirtual调用。
+
+
+String对象是不可变的，编译器会自动引入java.lang.StringBuilder类，因为他更高效，即使我们源代码中完全没用到这个StringBuilder类
+StingBuilder是javaSE5引入的，之前用的是stringBuffer,后者是线性安全，所以开销更大。
+"+"连接符 编译器自动引入了java.lang.StringBuilderd类，调用它的append（）方法。
+stringBuilder是非线程安全，单线程，一般比stringBuffer快
+stringBuffer线程安全
+在JDK5之后引入里StringBuilder，string的也开始使用stringBuilder来实现赋值。因为非线程安全，开销小
+ 
+ isEmpty（）：既要判断null，又要判断由空格组成的字符串
+  public static boolean isEmpty(CharSequence str) { 
+  if (str == null || str.length() == 0) 
+  return true; 
+  else 
+  return false; }
+
+第十五章 泛型  即"参数化类型"
+
+参数，最熟悉的就是定义方法时有形参，然后调用此方法时传递实参
+
+例子：容器类对象可以同时接收多个不同类型的参数，
+当我们将一个对象放入集合中，集合不会记住此对象的类型，
+当再次从集合中取出此对象时，改对象的编译类型变成了Object类型，但其运行时类型任然为其本身类型
+泛型的作用就是让容器类记住传入参数的类型
+
+public class GenericTest {
+
+    public static void main(String[] args) {
+        List list = new ArrayList();
+        list.add("qqyumidi");
+        list.add("corn");
+        list.add(100);
+
+        for (int i = 0; i < list.size(); i++) {
+            String name = (String) list.get(i); // 1
+            System.out.println("name:" + name);
+        }
+    }
+}
+list<T> list=new arrayList<T>:List是接口，ArrayList是他的实现类
+
+
+泛型的主要目标是提高 Java 程序的类型安全。
+可以把类型参数看作是使用参数化类型时指定的类型的一个占位符，就像方法的形式参数是运行时传递的值的占位符一样。
+范型类多应用与容器类
+K —— 键，比如映射的键。 
+V —— 值，比如 List 和 Set 的内容，或者 Map 中的值。 
+E —— 异常类。 
+T —— 泛型。
+ 一般的方法和类，只能使用具体的类型：要么是基础类型，要么是自定义类型，如何编写可以应用于多种类型的代码
+
+ 
+ 
+ HashMap和TreeMap对比：都返回value对象（一个不储存对象的collection集合）
+ 
+ 3.2.1 map的value（）：hashmap的value（）方法返回的是一个value集合对象，这个对象不能添加内容，他的主要作用是
+ 遍历出hashmap里面的所有内容，通过调用nextEntry（）方法（一个引用变量指向下一个引用）
+ preEntey():获取当前节点的上一个节点；
+ 
+ Set和Map的关系
+ Set(集) List(列表) Map(映射) Collection接口
+ set和list都继承了Collection接口，map没有
+ Set接口主要实现了两个类：
+ HashSet:HashSet类按照哈希算法存取集合中的对象，存取速度快
+ TreeSet:TreeSet类实现了SortedSet接口，能够对集合中的对象进行排序。
+ 
+ Set代表的是一种无序的且集合元素不可重复的“集合”
+ set插入重复的元素时，set会自动将其去掉。
+ Map 是由多个Key-Value对组成的集合（Key不可重复，且无序，可以看成是一个Set集合）
+ set可以扩展为map集合
+ 当map.put()方法时，每个对象都会调用一个hashCode()的方法；通过Key去调用hashCode()获得储存地址，如果两个key返回地址一样，
+ 将会调用equal()判断是否调用
+ HashMap的初始化容量总是小于实际容量，除非是指定的initialCapacity的值是2的n次方，这样做可以减小容量开支
+ HashMap的Entry链：一个bucket只放一个Entry,每个Entry都会指向下一个Entry；就是value()的原理
+ HashMap的get:通过key取得hashcode()方法的返回值，这个值就是指向table中key的索引,取出Entry，返回value
+ HashMap的负载因子(load fator)：默认值是0.75，这是时间和空间上的一种折中，增大负载因子可以
+ 减小占用空间（就是那个Entry数组）所占用的空间，但会增加查询数据的时间开销。
+ 不管是HashMap和TreeMapd的value方法都可返回其所有value组成的Collection集合，那这个Collection集合应该是List集合，因为Map的value允许多个重复
+ 但实际上value（）方法返回的是一个不储存元素的Collection集合，当程序遍历Collection集合时，实际上就是遍历Map对象的value,降低系统内存开销。
+
+ Map和list（Collection的派生）的关系
+ 
+       Map是关联数组。
+ 用法上相似:map接口提供get(K key)返回value
+            list接口提供get（int index)返回value
+ 
+ 习惯上把JavaScript对象的key-value称为属性名，属性值，对于javaScript而言除了使用属性方法获得属性值，还可以通过数组语法访问他的属性值；
+ javascript没有提供list和map，可以通过数组实现
+ 
+ 第十六章   数组
+ 单例集合顶层接口Collection，它派生两个接口Set和List。
+ Map接口，两个常用的实现是HashMap和TreeMap;
+ 1、集合与数组的特点
+集合：a、长度可变；b、只能储存引用数据类型；c、同一个集合中可以存储多种数据类型
+数组：a、长度不可变；b、可以存储基本数据类型和引用数据类型；c、同一个数组只能存储一种数据类型。
+？？？？集合只能存储引用数据类型
+
+ Java中的数组是静态的，一旦初始化完成，只能修改value，不能修改，所以当存储数据有变动的话，就产生了集合来代替。
+ 静态内部类和内部类：
+ 静态内部类可以独立存在，跟外部类没什么关系，内部类跟外部类同生同死。
+ 在JVM中静态方法一直存在，除非重启，而非静态的方法会随着对象的引用指向而变更；
+ java的静态和非静态的代码块的执行顺序:静态代码块>非静态代码块>构造方法
+ 静态代码块的作用，可以用来初始化项目中嘴常用的对象和变量。
+ Java的数组变量是引用类型的变量，他并不是数据本身，所以只要让数组变量指向有效的数组对象，就可以直接使用这个数组变量。
+ ArrayList的长度是动态调整的，他会把传进来的数据当做object对象处理，缺点是临界点的扩容处理。处理过程：检查空间，空间不足，double，一只2倍增长到可以插入数据；
+ sychronized(同步)是java中的关键字，是一种同步锁。sun公司提供的两种list接口的实现类，vector是行程安全，有同步锁，保住一个线程读完，才允许另外的线程访问数据，保住数据干净。
+ arrayList是非线程安全，为了提高效率；
+ 对于基本类型的维数组，可以通过使用花括号将每个分量隔开；基本类型数组在不进行初始化的情况下，会被自动初始化。对象数组会被初始化为null.
+ Array.deeptoString对基本数组和对象数组都起作用；
+ 粗糙数组：每一个对象列表的长度都可以不一样。
+ 
+ 数组与泛型：
+ 通常，数组与泛型不能很好的结合。你不能实例化具有参数化类型的数组：
+ peel<Banana>[] peels=new Peel<Banana>[10];//Illegal
+ 但是数组必须知道它们所持有的类型，以强制保证类型的安全。所以你可以参数化数组本身的类型。
+ 
+ Arrays实用功能：
+ fill（）
+ sort（）用于对数组排序；
+ binarySearch（）用于在已经排序的数组中查找元素；
+ hashcode（）产生数组的散列码；
+ 
+ instanceof是Java、php的一个二元操作符（运算符），和==，>，<是同一类东西。由于它是由字母组成的，所以也是Java的保留关键字。
+ 它的作用是判断其左边对象是否为其右边类的实例，返回boolean类型的数据。
+ 可以用来判断继承中的子类的实例是否为父类的实现。
+ 
+ ArrayList和LinkerList：
+     在list集合的实现类中，主要有3个实现类：ArrayList,vector和LinkList。其中Vector还有一个Stack子类，这个Stack子类仅在父类的基础上增加了5个方法，这5个方法就将一个Vector扩展成了Stack。
+	 Vector和ArrayList底层都是基于java数组来储存集合元素，Vector其实就是ArrayList的线程安全版本，Vector的方法增加了synchronized修饰，ArrayListd的序列化实现比Vector的序列化实现更安全，因此Vector基本被ArrayList所代替。Vertoc唯一的好处是它线性安全。	 
+	 synchronized，只能防止多个线程同时执行一个对象的同步代码段，synchronized锁住的是括号里的对象，而不是代码。对于非static的synchronized方法，锁的就是对象本身也就是this。
+	 
+	 list代表的是一种线性表的数据结构，ArrayList则是一种顺序存储的线性表。ArrayList底层采用数组来保存每个集合元素，LinkList则是一种链式存储的线性表。其本质就是一个双向链表，但它
+	 不仅实现list接口，还实现Deque接口，也就是说LinkList既可以当成双向链表使用，也可以当成队列使用，还可以当成栈来使用（Deque代表双端队列，既具有队列的特征，也有栈的特征）。
+	 ArrayList在插入元素时需要完成：
+	  1.保证ArrayList底层封装的数组元素长度大于集合元素的个数；
+	  2.将插入位置之后的所有元素“整体后移”。
+	  反过来，当删除ArrayList集合中指定位置的元素时，程序也要后移
+	  但是程序调用get(int index )方法取出ArrayList 集合元素时，性能就非常快，
+	  源码： public E get（int index）{
+	       RandCheck(index);
+		   return （E）elementDate[index];
+		   }
+		   LinkList 本质是一个双向链表，因此使用以下内部类来保存每个集合元素。
+		   private static class Entry<E>{
+		              E element；
+					  Entry<E> next；
+					  EntryE> previous;
+					  Entry(E element,	Entry<E> next，Entry<E> previous)
+		               {
+					      this.element=element;
+						  this.next=next;
+						  this.previous=previous;
+					   }
+		   
+		   }
+         addBefore(element,(index==size？header：entry（index）))；//指定位置插入新节点。
+		 entry（int index）：搜索指定索引处元素；
+		 当程序调用add(int index,Object obj)向list集合添加元素时，arrayList必须对底层整体搬家。还首先判断数组长度，如果超过扩容1.5倍的数组，再由垃圾回收机制回收原有数组，系统开销大。
+		 LinkList主要的花销集中在entry（int index）方法上，一个个搜索前一个后一个的索引下的元素，
+		 
+		 将Map中所有的键存入到set集合中。因为set具备迭代器。所有可以迭代方式取出所有的键，再根据get方法。获取每一个键对应的值。
+		 keySet():迭代后只能通过get()取key 
+Iterator迭代器
+		   
+		   Iterator是一个迭代器接口，他专门用于迭代各种Collection集合，包括Set集合和List集合。
+		   只有一Scannner实现类。
+		   由于terator迭代器只负责集合元素进行迭代，它自己并没有保留集合元素，因此使用Iterator进行迭代时，通常不应该删除集合元素，否则将引发ConcurrentModificationException异常。
+		   允许通过Iterator提供的remove()方法删除刚遍历好的集合，也可以在迭代集合中直接删除集合中的某个元素。
+		   List可以看做所有的Key都是Int值得Map
+
+TreeMap  红黑树
+  
+  有序，每向TreeMap中放入一个Key-value对，系统都需要将该Entry当成一个 新的节点，添加到已有红黑树中，通过这种方式就可以保证
+ TreeMap所有的Key总是有小到大的排序，
+ 红黑树是一种自平衡二叉查找树，树中每个节点的值，都大于或等于在它的左子树中的所有节点的值，并且小于或等于在它的右子树中的所有节点的值，
+ 这确保红黑树运行时可以快速的在树中查找和定位所需节点。 
+ 
+ 
+-----------------------------------------------------------------------------------------------------------------------
+第十八章 I/O系统
+file 的I/O 和  socket I/O   NIO
+
+I/O在调用InputStream.read()方法是阻塞的，ServerSocket.accept()方法是阻塞的，
+
+非阻塞式IO(NIO在jdk1.4之后)同步非阻塞
+
+	NIO背后的基石：反应器模式reactor,用于事件多路分离和分派的体系结构模式。
+	
+	1.由一个专门的线程来处理所有的IO事件，并负责分发
+	2.事件驱动机制
+	3.线程通讯：线程之间是用过wait，notify等方式通讯，保证上下文切换都是有意义的，减少无谓的线程切换。
+	
+	java的NIO 采用双向通道进行数据传输，而不是单向的流stream
+	一共有四种事件：服务器端接收客户端连接事件，客户端连接服务端事件，读事件，写事件
+	阻塞的是selector,IO并不会阻塞，用一个Reator线程可以监听多个通道的事件，并分发给其他处理线程，select回去轮询
+	channel事件处理程序
+
+
+File类
+Reader和Write
+	Reader和Write则提供兼容Unicode与面向字符的I/O功能，国际化，处理16位的的Unicode字符
+	用过适配器转换如InputStreamReader和OutputStreamReader.	
+RandomAccessFile自我独立的类，除了实现DataInput和DataOutput接口之外，它和这两个继承体系没有任何关联。
+他是直接从Object派生而来。
+------------------------------------------------------------------------------------------------------------------------
+第十九章  枚举类型
+	
+	关键字enum可以将一组具名的值得有限集合创建为一种新的类型，而这些具名的值可以作为常规的程序组件使用。
+
+	enum values()返回实例数组，初始化每个实例
+	
+	enum没法被继承，可以添加新方法，有main（）
+	加载枚举类型时，每个实例会构造器，通过values获取到数组，遍历枚举类的实例时，会直接取已经实例化的对象的属性。
+	
+	enumMap可以改变值对象
+	
+	输出的次序决定于enum实例定义时的次序。
+	
+	多路分发：处理多种交互类型
+		java中只支持单路分发，当a.plus(b),如果要执行的操作包含了不止一个未知的对象时，那么Java的动态绑定机制只能处理一个的类型
+		
+	values()方法是编译器在编译时加入的static方法，编译器还加入了valueOf()方法，如果你enum实例向上转型为Enum类，将会失去values()方法
+----------------------------------------------------------------------------------------------------------------------------------
+第二十章  注解
+@Target  定义注解将用于什么地方（例如一个方法或一个域）
+@Retention  用来注解在哪一个级别可用，源代码中source，类文件中class，运行时runtime
+----------------------------------------------------------------------------------------------------------------------------
+第二十一章  并发
+     
+     java是一种多线程编程语言，javascript是单线程，没有回调（ajax异步，有返回值）	 
+	   并发设计思路：速度，设计可管理性
+	   并发的理想实例，每个任务都作为进程在其自己的地址空间中执行，因此任务之间根本不可能互相干涉。
+	   
+	   21.2基本的线程机制
+	     在使用线程时，CPU将轮流给每个任务分配其占用空间。每个任务都觉得自己一直在占用CPU，但事实上CPU时间是划分成片段分配给了所有的任务。
+		run(),yield(),sleep()休眠中止,lock(),get，setpriority()读写优先级
+		让步yield，建议具有相同优先级的其他进程可以运行。把控制权交给其他进程；
+		后台线程daemo,是指在程序运行的时候在后台提供一种通用服务器的线程；
+		加入一个线程t.join（）,此线程将被挂起，直到目标线程t结束才恢复。
+		//Java的内存与回收
+		 
+		 当一个对象失去引用时，JVM的垃圾回收机制会自动清除他们，并回收他们所占用的内存空间。
+		 
+ 挑用线程不直接调用此函数的run（）方法；而是必须调用 Thread 的 start() 函数，该函数再调用 run()。
+ Java 编程语言只允许一个类有一个父类。同时，某些程序员避免从 Thread 类导出，因为它强加了类层次。对于这种情况，就要 runnable 接口
+ 当使用 runnable 接口时，您不能直接创建所需类的对象并运行它；必须从 Thread 类的一个实例内部运行它。许多程序员更喜欢 runnable 接口，因为从 Thread 类继承会强加类层次。
+ 实现Callable接口来创建线程类，重写call()方法作为线程执行体，call（）方法既可以声明抛出异常，也可以拥有返回值。
+ 
+ 线程对类执行初始化，初始化过程主要完成如下两个步骤：
+ 1.位该类所有静态field分配内存
+ 2.调用静态初始化块的代码执行初始化
+ 
+ 在多线程的环境下不应使用线程不安全的类 
+ 
+ 
+ 参考于：http://blog.csdn.net/zzuchengming/article/details/52131940
+ 线程是CPU调度和分派的基本单位，他本身上基本不拥有系统资源，只拥有一点在运行中必不可少的资源（如程序计数器，一组寄存器和栈），
+ 但是它可与同属于一个进程的其他的线程共享进程所拥有的的全部资源。
+   每个独立的线程有一个程序运行的入口，顺序执行序列和程序的出口。不能够独立执行，必须依存在应用程序中。
+ 从逻辑角度来看，多线程的意义在于一个应用程序中，有多个执行部分可以同时执行。但操作系统并没有将多个线程看做多个独立的应用，来进行进程的调度和管理以及资源分配。
+   一个进程中的所有线程共享该进程的地址空间，但他们有各自独立的栈。
+     堆：是大家共有的空间    栈：是线程独有的。
+ 
+ Thread的start（）和run()方法的区别：---http://blog.csdn.net/xuxurui007/article/details/7685076
+ 子类run是直接重写，通过子类去调用，就是一个普通的java方法。
+	实现并启动线程有两种方法
+1、写一个类继承自Thread类，重写run方法。用start方法启动线程
+2、写一个类实现Runnable接口，实现run方法。用new Thread(Runnable target).start()方法来启动
+	在java当中，线程通常有五种状态，创建，（就绪）准备，运行，阻塞和死亡。
+	而run()方法是在运行状态调用
+	调用start()后，线程会被放到等待队列，等待CPU的调度，并不一定马上执行，只是将这个线程置于可执行状态。
+	start()方法来启动线程，真正实现了多线程运行。start（）方法来启动一个线程，此时的线程是处于就绪状态，并没有运行。
+	run（）方法当做普通方法的方式调用。
+	--多线程就是分时调用CPU，宏观上就是让所有线程一起执行，也叫并发。
+	
+	Exetor执行器
+	ExecutorService 具有生命周期的Exetor
+	注意ExetorService对象是使用静态Exector方法创建的，这个方法可以确定其Exector类型
+
+	前面加new
+	CacheThreadPool将为每个任务创建一个线程
+	在进行回收旧线程时，停止创建新的线程
+	
+	FixedThreadPool使用有限的线程集来执行提交的任务	有了fix你就可以一次性预先执行代价高昂的线程分配，因而也就可以限制线程的数量，这样可以节省时间，因为你不用为每个任务都固定的付出创建线程的开销，FixedExectorPool使用的Tread对象的数量是有界的
+	
+	SignThreadExector就像是线程数量为1的FixedTheadPool,该线程时连续运行的，如果向它提交多个任务时，那么这些任务将会排队，每个任务都会在下一个任务开始之前运行结束。
+>>>>>>>>>>>>>>>>>>>http://jinguo.iteye.com/blog/747256/
+	每个java程序都有一个默认的主线程。java程序总是从主类的main方法开始。当JVM加载代码，发现main方法后就启动一个线程，这个线程称作“主线程”
+	在main中再创建的线程称为其他线程。这是JVM就要在主线程和其他线程之间轮流切换。
+	运行状态：线程调用start()方法后通知JVM，JVM才能管理这个线程，知道又有一个新的线程在排队等候，而实现Runable接口的run()方法不行，
+	是因为new Thread()里面返回的是当前的实现类，Thread构造方法中打印当前线程名称仍然是Thread-main，就是一个普通的java对象，另一个主线程，不具备并发了。
+	
+
+>>>>>>>>>>>>>>>>>>>>线程小结
+		1.Runable可以是多个线程共同执行一个任务，thread不行是独立执行
+		2.没有发生资源抢占，线程独立运行互不影响
+		3.当发生了线程并发，不加同步锁，会发生重复执行动作
+		4.sleep（）停止，但并不释放资源
+		5.synchronized关键字修饰对象object方法，同步，只能一个线程执行结束后，才会释放资源
+		wait()方法属于Object类，sleep属于Thread类
+		当调用wait()方法的时候，线程会放弃对象锁，进入等待此对象的等待锁定池，
+		只有针对此对象调用notify()方法后本线程才进入对象锁定池准备获取对象锁进入运行状态。
+		wait(),notify(),notifyAll()不属于Thread类,而是属于Object基础类,也就是说每个对像都有wait(),notify(),notifyAll()的功能。
+        因为都个对像都有锁,锁是每个对像的基础,当然操作锁的方法也是最基础了。
+		6.Thread的join()方法，等待当前线程死亡，才释放，如果有设置时间，将在时间结束后释放。主要用于线程顺序执行，比如main主线程中加join，将在这个结束后继续执行main的下一个动作。
+		7.优先级大的优先执行，但是不一定
+&&hou
+
+//// 行程与进程的区别：
+       总结：进程和线程都是一个时间段的描述，是CPU工作时间段的描述。
+	   电脑的运行，实际就是CPU和相关寄存器以及RAM之间的事情，但CPU处理速度太快，所以在CPU看来任务都是一个一个的轮流着来，
+	   那么，线程和进程就是在这样的背景下产生的，两个名词就是对CPU时间段的描述
+	   进程是CPU资源分配的最小单位，线程是CPU调度的最小单位。颗粒大小不一样。进程“重量级” ，可以看成一个程序，
+	   
+	   程序员可以通过它进行多处理器编程，你可以使用多线程对运算密集型任务提速。
+	   比如，如果一个线程完成一个任务要100毫秒，那么用十个线程完成改任务只需10毫秒。
+	   Java在语言层面对多线程提供了卓越的支持，它也是一个很好的卖点。
+	   java中是如何实现线程的，
+	   
+	   Thread这个类的一个实例就是一个线程，它通过调用Runnable接口的run（）方法来实现的，由于线程类本身就是调用Runnabe接口方法，
+	   所以可以继承线程类或直接调用Runnable接口重写run方法。（Java不支持类的多重继承，但允许你调用多个接口）
+-------------------------------------------------------------------------------------------   
+封装与继承：
+     封装是通过三个访问控制关键字来实现信息隐藏，public private protect可以修饰类，方法，成员。默认在没有任何修饰的情况下，同包内的类可以访问该成员。
+	 如果要隐藏一个类的成员变量，只要在该成员变量的前面加上private，这样外部就无法直接通过类的实例来访问这些成员变量了。
+	 Post类中我们用public修饰类本身，却用private修饰成员变量：
+	  public class Post{
+	   private a;
+	  }
+ 想要让外部访问该成员变量的话，可以可给这些私有的成员变量添加public的访问方法：
+     public class Post{
+	  
+	  
+	  public String geta(){
+	     return a;
+	  }
+	 }
+ 
+ 抽象类和接口：多态的一种表现。
+ 
+   由于抽象类不能实例化，和接口类似，所以抽象类必须被继承，才能使用。
+   接口是一组抽象方法的集合。接口中定义的方法没有方法体，他们以分号结束。
+   通过接口来申明变量，可以让程序更具有扩展性，因为将来我们更好替换接口的实现。
+   接口中的方法默认就是public的，所以所有的public修饰符也是不需要的。
+   但是抽象类不支持多继承。接口不能提供任何方法的实现，但是支持多继承。
+ 
+ while 和do-while 的使用方法，
+       whil（Boolean） 语句
+	   do 语句 while（Boolean） 区别就在于这个至少执行一次语句。
+ java中getClass()和getSimpleName():
+      getClass获得对象的类，getSimpleName是获取类的简称。
+ typeof是一个一元运算符，type(变量)返回的是变量的类型 用在JS？
+----------------------------------------------------------------------------------------------------------------------
+Java程序的变量大体可分为成员变量和局部变量：
+	局部变量的作用时间很短暂，它们都被存储在方法的栈内存中；（形参，方法内的局部变量，代码块的局部变量）
+	类体内定义的变量被称为成员变量（英文是Field）,如果加上static修饰又成为类变量或静态变量
+	
+隐式调用和显示调用： 构造器中this是代表什么对象
+    当调用某个类的构造器来创建Java对象时，系统总会先调用父类的非静态初始化块。这个调用时隐式执行的，而且父类的静态
+初始化块总是能会被执行。接着会调用父类的一个或多个构造器执行初始化，这个调用即可以是通过super进行显式调用，也可以是隐式调用。
+	调用父类的哪个构造器执行初始化，则分为如下几种情况：
+	1.子类构造器执行体的第一行代码使用super显式调用父类构造器，系统将根据super调用里传入的实例列表来确定；
+	2.第一行代码使用this显式调用本类中重载的构造器。系统将根据this传入的实参列表确定；
+	3.子类构造器中既没有super调用也没this调用，默认无参构造器。
+	当this在构造器中时，this代表正在初始化的Java对象（例如子类）。此时的this位于Base()构造器中，但是实际代码放在Drived()
+	构造器中执行——时Derived构造器隐式调用了Base()构造器的代码，this虽然代表Derived对象，但它却位于Base构造器，它的编译时类型是Base,
+	而他实际引用指向Derived对象。
+		当变量的编译时类型和运行时类型不同时，通过该变量访问它引用的对象的实例变量时，该实例变量的值由声明该变量的类型类型决定；
+		通过该变量调用它引用的对象的实例方法时，该方法行为将有实际引用的对象来决定：？？？
+		为什么会有这样的差异呢？？
+		
+	父子实例的内存控制
+	--继承成员变量和继承方法的区别
+	  super关键字不能当成一个真正的引用变量使用。
+	当程序创建一个子类对象时，系统不仅会为该类中定义的实例变量分配内存，也会为其父类中定义的所有实例变量分配内存，即使子类定义了与父类中同名的实例变量分配内存。
+	子类与父类的实例变量同名，只是把父类的实例变量隐藏，并没有完全覆盖。
+	
+	向上转型的的意义：
+	因为子类是对父类的一个改进和扩充，所以一般子类在功能上较父类更加强大，属性更为独特，把一个父类引用指向一个子类对象，
+	这样做的目的就是既可以使用父类的共性，又可以调用子类的新添的独特属性，但是这个父类引用只可以调用所有父类的属性和方法
+	如果要想调用子类的属性方法，需要进行——向下转型。
+	
+	子类的方法可以访问父类的实例变量，父类不能，因为父类根本无法得知被哪个子类继承，但在极端情况，可能出现父类访问子类变量。
+	如果父类的构造器调用了被子类重写的方法，且通过子类构造器来创建子类对象，调用了这个父类的构造器，就会导致子类的重写方法
+	在子类构造器的所有代码之前被执行，从而导致子类的重写方法访问不到子类的实例变量值得情形。this.play
+
+
+	变量（基本数据类型变量和引用类型变量）与对象的区别:
+   要使用对象，必须将对象的内存地址指定到一个引用类型的变量中。引用就是指向，指针的意思
+   变量只是分配了栈内存，并没有分配内存空间，而对象是已经在内存中占用了空间，有引用指向该内存空间。
+   变量声明之后，如果没有进行赋值，是不能在代码中使用的。而对象是可以在代码中使用，并使用它的成员变量或者方法。
+   变量的值只能通过赋值表达式来改变；对象的内容只能通过自身的方法或属性来改变。
+   基本数据类型之间的比较，本质上是变量值比较。可以用==
+   引用类型的变量比的是内存地址的比较，Javad的Object类提供了equals方法，object是根类，我们在自己类中改写equals方法，可以实现对象内容比较。
+   == 指针对变量的值，equals比较的是对象的内容。引用类型的值，放的是内存地址。
+   成员变量和局部变量：一个在整个类的作用域有效，一个针对声明它的方法体中有效
+   成员变量又可以分为实例变量（int i）和类变量(Shape s)。
+   当局部变量和成员变量时，该成员变量会被隐蔽起来，要使用成员变量，需要this这个成员变量
+   
+   1.局部变量一般声明在方法中，当他们执行完成后，变量将会被销毁；局部变量是在栈上分配的，局部变量没有默认，必须初始化才可以使用
+   2.实例变量声明在一个类中，但在方法，构造方法之外，当一个对象被实例化，实例变量是在对象创建的时候创建，在对象被销毁的时候销毁。
+   3.类变量（静态变量）
+--------------------------------------------------------------------------------------------------------  
+/////////////////// POI   
+    http://blog.csdn.net/u011182715/article/details/51473618
+    https://my.oschina.net/zimingforever/blog/101142
+    POI支持微软的OLE2格式文件Office 2003及以下版本；同时支持微软的OOXML（Office Open XML）标准，也就是Office 2007以上版本。JXL只能实现对Excel 2003以下版本的支持。
+    POI使用HFFS对象操作OLE2格式Excel，文件后缀为.xls的；使用XSSF、SXSSF对象操作OOXML格式Excel，文件后缀为.xlsx的。
+    文件流FileOutputStream类
+    采用BufferOutputStream类将FileOutputStream作为参数新建一个对象可以提高文件的读写效率
+    rowiterate
+	关于Excel表格的一些背景颜色的读取、边框的读取和设置，以及数据有效性的添加。
+	一般通过XSSFCellStyle设置或者读取。
+	
+	POI实现Servlet导出Excel
+	HttpServletRequest和ServletRequest的区别：
+	  HttpServletReqesut是ServletRqueat对Http协议的更具体抽象。
+	  GenericServlet是除了service（）方法外的其他4中方法的简单实现。
+	  HttpServlet是继承于GenericServlet类，用于创建适合Web站点的http Servlet.
+	  ServletOutputStream继承于java.io.OutPutStream,这是servlet容器实现的抽象类。该类的子类必须实现java.IO.OutputStream的write()；
+	  
+--------------------------------------------------------------------------------------------------------------------
+//////////////迭代器iterator和for循环的区别
+  迭代器是一种模式，他可以使得对于序列类型的数据结构的遍历行为与被遍历的对象分离，即我们无需关心该序列的底层结构是什么样子的。只要拿到这个对象，使用迭代器就可以遍历这个对象的内部。
+  Iterable接口包含一个能够产生Iterator()方法，并且Iterable接口被foreach用来在序列移动。
+  Iterator与泛型搭配，就是提前告诉集合确定要装入集合的类型，这样就可以直接使用而不用显示类型转换。
+  foreach和Iterator的关系，for each是jdk5.0新增加的一个循环结构，可以用来处理集合中的每个元素而不用考虑集合下标。
+{
+  对比：ArrayList（基于动态数组）对随机访问比较快，而for循环中的get()方法，采用的即是随机访问的方法，因此在ArrayList里，for循环较快
+        Linkedlist（基于链表的数据结构）则是顺序访问比较快，iterator中的next（）方法，采用的即是顺序方法的方法，
+从数据角度分析，for循环适合访问顺序结构，可以根据小标快速获取指定元素。而Iterator适合访问链式结构，因为迭代器是
+通过next（）和Pre()来定位。可以访问没有顺序的集合。
+使用 Iterator 的好处在于可以使用相同方式去遍历集合中元素，而不用考虑集合类的内部实现（只要它实现了 java.lang.Iterable 接口），
+如果使用 Iterator 来遍历集合中元素，一旦不再使用 List 转而使用 Set 来组织数据，那遍历元素的代码不用做任何修改，如果使用 for 来遍历，那所有遍历此集合的算法都得做相应调整,
+因为List有序,Set无序,结构不同,他们的访问算法也不一样.
+
+@suppressWarnings注解的作用：
+  该批注的作用是给编译器一跳指令，告诉他对呗批注的代码元素内部的某些警告保持静默。
+  @suppressWarnings批注允许您选择性的取消特定代码段（即类，方法）中的警告，它将提高代码安全性，因为它将防止您对警告无动于衷
+  抑制单类型警告：@suppressWarnings（“”）
+  抑制多类型警告：@suppressWarnings（value={“”，“”}）
+  抑制所有类型警告：@suppressWarnings（“all”）
+  deprecation（抑制过期方法警告）unchecked（抑制没有进行类型检查操作的警告）unused（抑制没有被使用过的代码的警告）
+ 
+ Iterator迭代器 是专门用于迭代各种Collection集合，包括Set集合和List集合。这个接口只有一个Scanner类
+ Scanner类不能用于迭代Set,List集合，除了EnumSet集合对应的是RegularSet的一个内部类，所有的Set集合对应的Iterator都是它
+ 对应的Map类的内部类KeyIterator,Set的底层是通过Map来实现的。
+ 由于Iterator迭代器只负责对各种集合所包含的元素进行迭代，它自己并没有保留集合集合元素，因此使用Iterator进行迭代时，通常不应该删除集合元素java.util.ConcurrentModificationException
+  
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+////////cookie 
+request.getRequestedSessionId()方法获取的值是Cookie中的值，即使URL中的jsessionid的值
+
+ 
+ 转义字符"\\"是"/"一个反斜杠：如\\*=/*
+ 
+ cookie的值储存位置：
+ 
+----------------------------------------------------------------------------------------------------------------------------
+////////String类的分析
+
+  1.String类实现了Serializable, Comparable, CharSequence接口
+  
+  String中substring（i,j）方法的使用：截取第i个位置到第j个位置的字符串,用来截取字符串
+  intValue 可以将类型返回为int基本数据类型。
+  
+  ——》》》toString，（String）,String.valueOf（）的区别：
+    》严格意义上的java对象都会具有toString这个方法，java.lang.Object包含这个方法，当派生类会重载这个toString方法，要注意的是对象的值不能为空。
+	》（string）强制类型转换，需要确定数据必须可以转换为string类型，不然运行，编译会报错。（null值可以强制转换为所有类型，（Boolean）null）
+    》 string.valueOf()可以判断对象是否为空，源码是通过toString（）实现的，多了一个三元条件运算符判断。如果object为空，调用完方法后，返回的是字符串“null”，不是null
+ 
+   jdk1.5之后的新特性，我们叫它为可变参数，即  varargs 。 
+   之前我们定义可变参数是采用String[] args的方法来声明。
+   事实上String[] args 和 String... args 本质上不没有什么区别，String... args 最后还是转化成String[] args 来做的，只是String... args这种形式在应用上更加的灵活和简便。 
+   final修饰的属变量性，如果初始化之后，再次被调用的话，会报错。
+ 
+	string.getBytes() 
+    使用平台的默认字符集将此 String编码为字节序列，将结果存储到新的字节数组中。 
+	String startWith() 
+	测试此字符串是否以指定的前缀开头。
+---------------------------------------------------------------------------------------------------------------------------------
+ /////////////////////JDK版本区别/////////////////////
+ 
+///////jdk 8:语言新特性    http://blog.csdn.net/yczz/article/details/50896975
+   Lambda表达式和函数接口
+     Lambda表达式也称为闭包，它允许我们将函数当成参数传递给某个方法，或者把代码本身当做数据处理；之前都是使用匿名内部类代替闭包。
+	 简单的Lambda表达式可由逗号分隔的参数列表、——>符号和语句组成。
+	 Lambda表达式可以看成把内部匿名类的方法体直接取出，用->表示，把方法当参数使用
+	 为了让现有的功能与Lambda表达式良好兼容，产生了函数接口这个概念。函数接口指的是只有一个函数接口，这样的接口可以隐式转换为Lamdbda表达式。
+	 @FunctionInterface显式说明某个接口时函数接口
+	 
+	 
+	 使用两个新概念扩展了接口的含义：默认方法和静态方法。默认方法往现存接口中添加新的方法，可以不强制那些实现了该接口的类也同时实现这个新添加的方法。
+	 默认方法和抽象方法之间的区别在于是否需要实现。
+	 java8带来另一个有趣的特性是在接口中可以定义静态方法。
+	 由于JVM上的默认方法的实现在字节码层面提供了支持，因此效率非常高。默认方法允许在不打破现有继承体系的基础上改进接口。该特性在官方库中的应用是：给java.util.Collection接口添加新方法，如stream()、parallelStream()、forEach()和removeIf()等等。由于JVM上的默认方法的实现在字节码层面提供了支持，因此效率非常高。默认方法允许在不打破现有继承体系的基础上改进接口。
+	 该特性在官方库中的应用是：给java.util.Collection接口添加新方法，如stream()、parallelStream()、forEach()和removeIf()等等。
+
+//////jdk1.7 
+ 1.swith中可以使用字符串,switch(string s="")
+ 2.运用List<String> tempList = new ArrayList<>(); 即泛型实例化类型自动推断
+允许捕捉多个异常 try-catch
+ 
+////////jdk1.5
+可变参数....
+
+////////jdk1.6
+注释
+  suppressWarnings（"all"）该注释关闭或方法级别的编译器警告。
+  Override
+  Override表示，它所注释的方法应该重写超类中具有相同签名的方法： 
+
+  
+---------------------------------------------------------------------------------------------------------------------------- 
+/////////////socket/////////////
+
+ExecutorService类，提供方法来管理终端和方法，可以产生Future为跟踪一个或多个异步执行。
+
+void execute(Runnable command)-可以自行实现runnable接口的run方法？？可以 已测试
+在将来的某个时间执行给定的命令。 该命令可以在一个新线程，一个合并的线程中或在调用线程中执行，由Executor实
+
+
+ExecutorService 的生命周期
+	shutDown():这个方法会平滑地关闭ExecutorService，当我们调用这个方法时，ExecutorService停止接受 任何新的任务且等待已经提交的任务执行完成(已经提交的任务会分两类：
+	一类是已经在执行的，另一类是还没有开始执行的)，当所有已经提交的任务执行完毕后 将会关闭ExecutorService
+	
+	awaitTerination(timeOut,unit):这个方法有两个参数，一个是timeout即超时时间，另一个是unit即时间单位。这个方法会使线程 等待timeout时长，当超过timeout时间后，会监测ExecutorService是否已经关闭，若关闭则返回true，否则返回false。 
+	一般情况下会和shutdown方法组合使用
+	
+	
+
+----------------------------------------------------------------------------------------------------------------------------
+/////////////date///////////////
+	java中日期类的格式
+	java.util.Date日期格式为：年月日时分秒 
+	java.sql.Date日期格式为：年月日
+	java.sql.Time日期格式为：时分秒 
+	为什麽有的格式大写，有的格式小写，那是怕避免混淆，例如MM是月份，mm是分；HH是24小时制，而hh是12小时制 
+	注意：12小时制，simpledateformate的格式需要添加后面要加上Locale.ENGLISH，不然会报错误：Unparseable date。
+	
+	》》》》正则表达式：(?i)(?<=MEMBERID\":\")[^\"]*(?=\")"
+	\s 匹配任意的空白符
+	\w 匹配字母或数字或下划线
+	$ 	匹配字符串的结束
+	i	表示在进行匹配的时候不区分大小写
+	m	多行识别.即将字符串视为多行,不管是那行都能匹配
+	s	将字符串视为单行,转义回车换行符作为普通字符
+	^   反义符
+	（？=a）来表示我们是否需要匹配某个东西
+	[abc]取其一
+	
+	语法与释义：
+　　基础语法 "^([]{})([]{})([]{})$"
+　　正则字符串 = "开始（[包含内容]{长度}）（[包含内容]{长度}）（[包含内容]{长度}）结束" 
+	
+	split（string rex）这个里面对应的是正则表达式符号，"!^" "|"不能使用
+----------------------------------------------------------------------------------------------------------------------------	
+
+	<同一个类里，方法调用另一个方法，直接写方法名。>
+	stringReader(字符流，其源是字符串)
+	 Java调用XML的方法：DocumentBuilderFactory 
+	 //得到 DOM 解析器的工厂实例      
+	 DocumentBuilderFactory domfac=DocumentBuilderFactory.newInstance(); 
+	 //DOM 工厂获得 DOM 解析器
+	DocumentBuilder dombuilder=domfac.newDocumentBuilder(); 
+	//解析 XML 文档的输入流，得到一个 Document对象
+	Document doc=dombuilder.parse(is); 
+	getElementsByTagName():
+	
+	Properties类是表示一组持久的属性，properties可以保存到流中后 或从流中加载。
+	属性列表中的每个键及其对应的值都是一个字符串，properties从继承Hashtable
+	load():以简单的线性格式从输入字符流读取属性列表（关键字和元素对）。 
+	getProperties():使用此属性列表中指定的键搜索属性
+	getClassLoader():返回类的类加载器。 
+	
+	ClassLoader类加载器是负责加载类的对象。 ClassLoader类是一个抽象类。
+	getResourceAsStream():返回用于读取指定资源的输入流。
+	
+	forName(String name, boolean initialize, ClassLoader loader) 
+	使用给定的类加载器返回与给定字符串名称的类或接口相关联的 类对象。 
+	
+	hashmap 的containKey()：如果该映射包含指定键的映射，则返回true
+	response.getWriter()“获取到response的流” 返回的是一个printWrite object
+	
+	AccessibleObject类是Field，Method和Constructor对象的基类。 
+	它提供了将反射对象标记为在使用它时抑制默认Java语言访问控制检查的功能
+	在反射对象中设置accessible标志允许具有足够权限的复杂应用程序（如Java对象序列化或其他持久性机制）以通常被禁止的方式操纵对象
+	
+	Field提供有关类或接口的单个字段的信息和动态访问。 反射的字段可以是类（静态）字段或实例字段。 
+	{field的方法：set(Object obj, Object value) 
+	将指定对象参数上的此 Field对象表示的字段设置为指定的新值。 }
+	Object ——getClass()：返回此object运行时的类
+	Class类的类表示正在运行的Java应用程序中的类和接口
+	getDeclaredFields() ：返回的 Field对象数组，反射此类或接口声明的所有字段，类对象。
+	
+	
+	AccessibleObject类：AccessibleObject类是Field，Method和Constructor对象的基类
+						它提供了将反射对象标记为在使用它时抑制默认Java语言访问控制检查的功能
+						boolean isAnnotationPresent():如果此元素上 存在指定类型的注释，则返回true，否则返回false
+	
+	PreparedStatement 表示预编译的sql语句的对象
+	execute（）执行p对象中的sql语句，可以是任何类型的sql语句
+	setObject（int parameterIndex,object x）使用给指定设置指定参数的值
+	setString (int parameterIndex,string value)设置给指定参数为字符串的值
+	setInt(int paramterIndex,float x):将指定的参数设置为给定的Java float值
+	system.getproperty（String key）//获取指定键指示的系统属性。 
+	
+	parameter可以拼接sql语句，条件语句中的参数可以用？表示，当要执行excute时，可以通过parameter类中的setObject方法给
+	参数赋值，下标从1开始。
+	
+	ResultSetMeteData类：可用于获取有关ResultSet对象中列的类型和属性的对象
+	ResultSet类：
+		getInt(): Return the column value; if the value is SQL NULL, the value returned is 0
+	
+	Java泛型中的标记含义：
+	E-element（在集合中使用，因为集合中存放的是元素）
+	T-Type(Java类)
+	K-KEY
+	V-value
+	N-number数值类型
+	references——>project:查看类方法在什么地方被调用
+	BigDecimal：Java在java.math包中提供的API类BigDecimal，用来对超过16位有效位的数进行精确的运算
+	
+	为了最大的效率，请考虑在BufferedReader中包装一个InputStreamReader。 例如： 
+	BufferedReader in
+	= new BufferedReader(new InputStreamReader(System.in)); 
+	
+	文件读入流fileinputstream 和写出流fileoutputstream：
+	fileinputstream的read（byte[] b）从该输入流中读取最多b.length个字节的数据为字节组。1024byte=1kb
+	然后循环写入outputStream（）write
+	
+	File类的separator   与系统相关的默认名称 - 分隔符字符，以方便的方式表示为字符串。
+
+	inputsource是xml实体的单一输入源
+	InputSource(String systemId) 创建一个带有系统标识符的新输入源。
+	stringreader 创建一个新的字符串阅读器。
+	
+	ByteArrayOutputStream 该类实现了将数据写入字节数组的输出流。 当数据写入缓冲区时，缓冲区会自动增长。
+	
+	PrintWriter(OutputStream out, boolean autoFlush) 
+	从现有的OutputStream创建一个新的PrintWriter。 
+	
+	enum类，有value()方法，查询API可以知道java.lang.Enum<ElementType>下没有这个方法，该方法
+	在java.lang.annotation.ElementType类下（public enum ElementType extends Enum<Element>）
+	values（）：
+	按照它们声明的顺序返回一个包含此枚举类型常量的数组。 该方法可用于遍历常量如下： 
+		for (ElementType c : ElementType.values())
+		System.out.println(c); 
+	总结：编译器自动生成
+	
+	for循环遍历赋值的变量，先执行出和遍历集合的大小相同的个数，再执行构造方法？
+	
+	String(byte[] bytes, Charset charset) 
+	构造一个新的String由指定用指定的字节的数组解码charset 。 
+	arraylist.toArray():已正确的顺序（从第一个到最后一个元素）返回一个包含此列表所有元素的数组。
+	返回的数组将是安全的。
+	toArray(T[] a):返回的数组的运行时类型是指定数组的运行时类型,如果列表适合指定的数组，则返回其中。 否则，将为指定数组的运行时类型和此列表的大小分配一个新数组。
+	new NameValuePair[0],用Object[0]来代替null 很多时候我们需要传递参数的类型，而不是传null，所以用Object[0] 
+	无参数的toArray()，return一个 object[]
+	例子：
+	String[] a = c.toArray(new String[0]);
+
+	如果指定的数组能容纳该 collection，则返回包含此 collection 元素的数组。
+	否则，将根据指定数组的运行时类型和此 collection 的大小分配一个新数组。
+	这里给的参数的数组长度是0，因此就会返回包含此 collection 中所有元素的数组，并且返回数组的类型与指定数组的运行时类型相同。
+	URLEncoder.encode("chinese",charset)
+	
+	////////////  httpclient
+	POST方法用于请求原始服务器接受请求中包含的实体作为请求行中请求URI标识的资源的新下属
+	PostMethod getMethod
+	postMethod.addParameters():  Adds a new parameter to be used in the POST request body.
+	pastMethod.getParams():return Http protocol parameters assciated with this method
+	NameValuePair是简单名称节点类型，主要表达形式是键值对的表达形式。
+	postMethod.releaseConnection():
+	释放此HTTP方法所使用的连接。
+	特别是连接用于读取响应（如果有的话），将保留到响应被读取为止。
+	如果该连接可以被其他HTTP方法重用，则此时它不关闭。
+	
+	setparameter（）：assigns the  value to the parameter with given the name
+	HttpConnectionManagerParams:该类表示适用于HTTP连接管理器的HTTP协议参数的集合。
+	
+	public PostMethod():Constructor specifying a URI.
+	
+	/////////常用远程通讯协议的比较///////////
+	RMI>Httpinvoker>Hession>Burlap>webService
+	Hession它是caucho公司提供的开源协议，是基于HTTP传输，服务器端不用开防火墙，协议的规范公开化，可以用于任何语言。
+	Burlap与Hession都是caucho公司的开源产品，只不过Hession采用二进制的方式，而Burlap采用XML格式。
+	Burlap在数据结构不复杂，数据量中等等情况下，效率可以接受，其它就会急剧下降。
+	可能原因：
+	1.XML数据描述内容太多，同样的数据结构，其传输量要大得多
+	2.XML的解析是非常耗资源的，特别对于大数据量情况下更是如此
+	基于XML-RPC协议实现。
+	
+	
+	Class类：该类表示正在运行的Java应用程序中的类和接口。
+	boolean isPrimitive():确定指定类对象一个基本类型
+	
+	Map接口：
+		keyset():返回所有包含所有键的集合
+	
+	Method :方法类 ，方法提供有关类和接口上单一方法的信息和访问权限。反映的方法可以是类方法或实例方法（包括抽象方法）
+		invoke(object obj,Object... args)：在具有指定参数的方法对象上调用此方法对象表示的底层方法。
+		
+	Vector:该类实现了可扩展的对象数组。它包含可以使用整数索引访问的组件。
+	但是，Vector的大小可以根据需要增长或缩小，以适应在创建之后添加和删除项目。
+	
+	Runtime类：
+		exec（string command） 在单独的进程中执行指定的字符串命令。
+		getRuntime（） 返回与当前Java应用程序关联的运行时对象。
+		availableProcessors() 返回可用于Java虚拟机的处理器数量
+	
+	Executors类：工厂和工具方法Executor ， ExecutorService ， ScheduledExecutorService ， ThreadFactory和Callable在此包中定义的类。
+	newFixeThreadPool():创建一个线程池，该线程池重用固定数量的从共享无界队列中运行的线程。
+	
+	InetSocketAddress类：该类实现IP套接字地址（IP地址+端口号）它也可以是一对（主机名+端口号），在这种情况下将尝试解析主机名
+						connection（）：将此套接字连接到具有指定超时值的服务器。
+
+----------------------------------------------------------------------------------------------------------------------------						
+///////////////////////////////////////////秘钥	
+	Cipher类：该类提供加密解密密码的功能。它构成Java加密扩展框架的核心
+			  应用程序调用Cipher的getInstance方法，将所请求的转换的名称传递它。
+	
+	PublicKey:公钥 此接口不包含方法或常量，它仅用与对所有公钥接口进行分组（并提供类型安全性）。
+	
+	KeyGenerator:该类提供了一个秘密（对称）秘钥生成器，keyGenerator对象是可重用的。
+				getInstance(String algorithm) 
+				返回一个 KeyGenerator对象，该对象为指定的算法生成密钥。
+				init(int keysize) 
+				初始化此密钥生成器用于某些密钥大小
+				generatorKey()
+				生成秘钥
+	Key：
+			getEncoded() 返回其主要编码格式的密钥，如果此密钥不支持编码，则返回null
+			getAlgorithm() 返回此键的标准算法名称。
+
+	SecretKeySpec类：此类仅对可以表示为字节数组并且没有与其相关联的关键参数的原始密钥
+				SecretKeySpec(byte[] key, String algorithm) 
+				从给定的字节数组构造一个秘密密钥。 
+				
+	Base64编码方法要求把每个8Bit的字节转换为四个6Bit
+	由于不同的设备对字符的处理方式有一些不同，这样那些不可见字符就有可能被处理错误，这是不利于传输的。
+	所以就先把数据先做一个Base64编码，统统变成可见字符，这样出错的可能性就大降低了
+	
+	string.charAt(int index):返回所在下标的值
+	
+	DecimalFormat是格式为十进制数的NumberFormat的具体子类。 
+	它具有各种功能，旨在使任何地区的数字解析和格式化，包括支持西方，阿拉伯语和印度数字。 
+	它还支持不同类型的数字，包括整数（123），定点数（123.4），科学记数法（1.23E4），百分比（12％）和货币金额（123美元）。 
+	所有这些都可以进行本地化。
+	
+----------------------------------------------------------------------------------------------------------------------------	
+////////////////////////////////////////静态域和静态方法
+	静态域被实例对象共享
+	
+	>>>>重写equals方法，hashcode是用于散列数据的快速存取，如利用HashSet/HashMap/Hashtable类来存储数据时，都是根据存储对象的hashcode值来进行判断是否相同的
+		例子：String和StringBuffer的hashcode()方法，相同值string类型得到的值是一致，stringbuffer没有重写hashcode()
+		得到的哈希码是object默认导出得到的，所有得到的值不同。
+		
+	>>>>泛型数组列表
+		自动打包
+		泛型的主要目的之一就是用来指定容器要持有什么类型的对象，而且由编译器来保证类型的正确性
+		因此与其使用Object，我们更喜欢暂时不指定类型，而是稍后再决定具体使用说明类型。
+		要达到这个目的，需要使用类型参数，用尖括号扩住，放在（类名后面）。然后在使用这个类的时候，在用实际的类型替换此类型参数。
+		T就是参数类型
+	>>>>>反射分析类的能力
+		java.lang.reflect包中有三个类Field,Method,Constructor分别用于描述类的域，方法和构造器
+		AccessibleObject类是Field，Method和Constructor对象的基类，它提供了将反射对象标记为在使用它时抑制默认Java语言访问控制检查的功能。 
+		
+----------------------------------------------------------------------------------------------------------------------------		
+/////////////////////////////////二进制运算
+ 
+   与，或，异或（0异或任何数等于任何数，1异或任何数等于任何数取反）实现两个数字值交换
+   左移，右移（有符号值得右移，则用数字的符号位填补最左边的n位）
+   把整数右移一位和整数除以2在数学上是等价的。
+   例子：a<<1;//a=a*2
+		 a<<2;//a=a*2的2次方
+   移位运算是最有效的计算乘除的运算之一。
+   
+ ---------------------------------------------------------------------------------------------------------
+对象的三种状态：可达状态，可恢复状态，不可达状态
+	在回收该对象之前，系统会调用可恢复状态的对象的finalize方法进行资源清理，如果系统在调用finalize重新让一个或多个引用变量引用该对象，便进入可达状态
+	当某个对象被其它类的类变量引用时，只有把该类销毁后，该对象才会进入可恢复状态；当某个对象被其他对象的实例变量引用时，
+	只有当引用该对象的对象被销毁或变成不可达状态，进入不可达状态。
+ 
+ 强引用，软引用，弱引用  虚引用 JDK 1.2
+ Java内存泄漏
+  如果无用的内存没有被回收回来，那就是内存泄漏。 
+  elementDate[--size] = null
+  
+  Young Old Permanent（持久层，主要用于装载Class,方法等信息）堆内存的分代回收
+  
+  常见垃圾回收器
+  1.串行回收器 2.并行回收器 3.并行压缩回收器 4.CMS 并发标识-清理
+  
+内存管理的小技巧
+	1.尽量使用直接量
+	2.使用StringBudilder和StringBuffer进行字符串连接*（如果无变量的话，使用字符串直接量然后引用）
+	3.尽早释放无用对象的引用
+	4.尽量少用静态变量，类变量存在permanent代里
+	5.避免在经常调用的方法，循环中创建Java对象（在这种不断的分配，回收操作中，程序的性能受到巨大的影响）
+	6.缓存经常使用的对象（使用HashMap进行缓存，直接使用某些开源的缓存项目OSCache,Ehcache）
+	缓存设计本身就是一种以牺牲系统空间来换取运行时间的技术。
+	7.尽量不要使用finalize方法
+	8.考虑使用SoftReference,内存不足时，释放软引用所引用的对象，所以程序取出SoftRerence所引用的Java之后，应该显示判断该对象是否为null。
+  
+  
+------------------------------------------------------------------------------------------------------
+表达式中的陷阱
+	JVM对字符串的处理
+	String java = new String（"Hello"）；//字符串直接量和构造器的字符串对象
+	上面语句实际上创建了2个字符串对象，一个是直接量对应的字符串对象，一个是由new String()构造器返回的字符串对象。
+	两个字符串变量的值都是直接量，都是指向JVM的字符串池中的字符串
+	
+	String类的不可变
+		字符串连接运算改变的只是引用的实际指向，但之前指向的字符串并不会被垃圾回收，因为它将一直存在于字符串池中
+		System类的identityHashCode()静态方法来获取string的identityHashCode值，
+		这就是Java内存泄漏的原因之一。还有数组的值remove后对象内存是否释放？？？？
+	StringBuffer和StringBuilder
+		sbf是线程安全，但执行效率低下，所以在没有多线程的环境下，应该优先使用sbd来表示字符串
+		
+	复合赋值运算符的陷阱，会发生截位
+	输入法的错误
+	
+	
+------------------------------------------------------------------------------------------------------
+
+构造器创建对象吗？
+	对象所需要的内存空间，应该是由new关键字申请出来的；
+	构造器只是负责执行初始化
+	
+无限递归的构造器
+方法重载调用，当实际调用传入的实参同时满足多个方法时，如果某个方法非形参要求的范围越小，那这个方法就越精确。
+
+
+---------------------------------------------------------------------------------------
+线性表
+
+应用程序中的数据大致有如下4类基本的逻辑结构
+	1.集合：数据元素之间只有“同属于一个集合”关系。
+	2.线性结构：数据元素之间存在一对一
+	3.树形结构：一对多个关系
+	4.图形结构或网状结构：多对多关系
+	
+	物理存储结构：
+	顺序和链式存储结构
+	
+	数组是不可变的，初始化之后，数组只能将指定元素赋值为null，但各种元素依然存在，这会造成内存泄漏。
+	
+
+	
+	
+	
+--------------------------------------------------------------------------------------------------------------
+
+可视化工具：FileZilla ,  scrt
+
+FTP 是文件传输协议
+	FTP协议有两种工作方式：PORT方式和PASY方式，中文意思是主动式和被动式
+	注意：在上传时候要确认好是那种方式，出现425，可以关闭其中一种方式quote PASV
+	
+	FTPClient在被动模式下，传送文件使用的是0端口，可以调用setActivePortRange设置主动模式时的端口范围
+	
+	在Window下使用ftpclient，需要处理window下一个FTP主动模式的缺陷，需要运行如下指令
+	
+	netsh advfirewall firewall add rule name='FTP Service' action=allow service=ftpsvc protocol=TCP dir=in
+	netsh advfirewall set global StatefulFTP disable
+	
+	
+------------------------------------------------------------------------------------------------------------------
+	ExecutorService
+	
+	Logger输出调试信息只要3个步骤：
+	1.调用Logger的getLogger()静态方法返回一个Logeer对象
+	2.使用setLevel()方法设置LOGGER的级别
+	3.使用Logger的debug(),info(),warn(),error(),fatal()方法输出信息。	
+	
+-------------------------------------------------------------------------------------------------------------------
+匿名类	
+	定义一个回调函数，不用编写大量代码
+	
+	
+	
+	
+--------------------------------------------------------------------------------------------------------------------
+
+设计模式（Designpattern）是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。使用设计模式是为了可重用代码、让代码更容易被他人理解、保证代码可靠性。 
+
+总体来说设计模式分为三大类：
+
+创建型模式，共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。
+
+结构型模式，共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。
+
+行为型模式，共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。
+
+-----------------------------------------------------------------------------------------------------------------
+
+讨论对使用完java对象赋值为null的作用？
+	可恢复状态：当某个对象被其他类的类变量引用时，只有该类被销毁后，该对象才会进入可恢复状态
+	当某个对象被其它对象的实例变量引用时，只用当引用该对象的对象被销毁或变成不可达状态后，该对象才会进入不可达状态。
+	
+GC触发条件：
+1)当应用程序空闲时,即没有应用线程在运行时,GC会被调用。因为GC在优先级最低的线程中进行,所以当应用忙时,GC线程就不会被调用,但以下条件除外。
+
+2)Java堆内存不足时,GC会被调用。
+
+------------------------------------------------------------------------------------------------------------------
+脚本语言是像剧本一样教计算机办某个事情的语言。
+所以脚本其实就是短小的、用来让计算机自动化完成一系列工作的程序，这类程序可以用文本编辑器修改，不需要编译，通常是解释运行的。
+
+
+shell既是一种命令语言，也是一种程序设计语言
+		#！是一个约定的标记，它告诉系统这个脚本需要什么解释器来执行，即使用哪一种 Shell。
+		sh(全称 Bourne Shell): 是UNIX最初使用的 shell，而且在每种 UNIX 上都可以使用。
+		Bourne Shell 在 shell 编程方面相当优秀，但在处理与用户的交互方面做得不如其他几种 shell
+		
+		Shell 的 echo 指令与 PHP 的 echo 指令类似，都是用于字符串的输出。
+		
+		运行样例：
+		chmod +x ./test.sh  #使脚本具有执行权限
+		./test.sh  #执行脚本
+		
+先通过快捷方式，打开WinRAR，到操作界面，然后解压war包
+
+sysbase关系型数据库
+	
+Xshell可以在Windows界面下用来访问远端不同系统下的服务器，从而比较好的达到远程控制终端的目的。	
+	
+	
+	

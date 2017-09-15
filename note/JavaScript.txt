@@ -1,0 +1,288 @@
+好用的Jqury插件库：http://www.jq22.com/jquery-info1139
+
+<script type=text/javascript>的类型定义多余
+funtion 函数名称（参数）{函数体}javascript的函数也是一个对象
+代码” ${pageContext.request.contextPath}”的作用是取出部署的应用程序名，这样不管如何部署，所用路径都是正确的。 
+$（“#”）是指选择器选择带有id的元素，
+遇到问题：406 Not Acceptable，message:description The resource identified by this request is only capable of generating responses with characteristics not acceptable according to the request "accept" headers ()
+由于我要返回的是json数据，而浏览器接受的是text/html;charset=UTF-8文本类型
+
+function的命名方式：简洁跟描述性强的，两个单词以上的的加下划线
+方法链：当方法的返回值是一个对象时，这个对象还可以继续调用其他方法，这种方式通常称为链或级联
+嵌套函数：内部函数可以调用外部函数的参数
+关键字this没有作用域的限制，嵌套的函数不会从调用他的函数继承this，
+（funtion（）{
+
+}（）;）//直接定义一个匿名函数，并在单个表达式中调用；
+while循环：当while循环开始后，先判断条件是否满足，如果满足就执行循环体内的语句，执行完毕后再回来判断条件是否满足，如此无限重复；直到条件不满足时，执行while循环后边的语句。
+
+
+Ajax:  /////http://www.cnblogs.com/Garden-blog/archive/2011/03/11/1981778.html
+
+JavaScript 对象：XMLHttpRequest
+
+基本流程：
+1、从 Web 表单中获取需要的数据。
+2、建立要连接的 URL。var url="/scripts/getZipCode.php?...."(设置一个 PHP 脚本作为链接的目标)
+3、打开到服务器的连接。xmlHttp.open("GET",url,true)
+4、设置服务器在完成后要运行的函数。xmlHttp.onreadystatechange///onreadystatechange 属性可以告诉服务器在运行完成后下一步的动作。
+5、发送请求。 xmlHttp.send(null); 因为已经在请求 URL 中添加了要发送给服务器的数据（data如表单数据），所以请求中不需要发送任何数据
+6. 处理服务器响应
+·什么也不要做，直到 xmlHttp.readyState 属性的值等于 4。
+·服务器将把响应填充到 xmlHttp.responseText 属性中。 
+ 
+ function updatePage() {
+  if (xmlHttp.readyState == 4) {
+    var response = xmlHttp.responseText;
+    document.getElementById("zipCode").value = response;
+  }
+}
+7. 启动一个Ajaxg=过程
+    onChange="callServer()";
+
+  escape() 函数可对字符串进行编码.
+	
+Ajax 基本上就是把 JavaScript 技术和 XMLHttpRequest 对象放在 Web 表单和服务器之间。当用户填写表单时，数据发送给一些 JavaScript 代码而不是 直接发送给服务器。
+相反，JavaScript 代码捕获表单数据并向服务器发送请求。同时用户屏幕上的表单也不会闪烁、消失或延迟。
+换句话说，JavaScript 代码在幕后发送请求，用户甚至不知道请求的发出。
+更好的是，请求是异步发送的，就是说 JavaScript 代码（和用户）不用等待服务器的响应。因此用户可以继续输入数据、滚动屏幕和使用应用程序。
+
+非mcrosoft浏览器：var xmlHttp=new XMLHttpRequest object;
+每个载入浏览器的HTML文档都会成为Document对象，Documen对象是我们可以从脚本中对HTML页面中的所有元素进行访问
+
+jquery的serializeArray方法：
+序列化表格元素，此方法返回的是JSON对象而非JSON字符串，返回的JSON对象是由一个对象数组组成的，其中每个对象包含一个或两个名值对——name参数和value参数（如果value不为空的话）。
+val()是返回属性value对应的值。
+Pagination.js 是一个简单、可定制的分页组件。
+
+\/\/\/\/\/datagrid的方法，属性，事件：
+forzencolumns:防止拥挤，冻结某些列，可以拖动某些列信息,如果是通过js绘制grid的，则添加一个forzenColumns属性即可.和列（column）属性一样，但是这些列将被冻结在左边。
+freezeRow:冻结指定的行，以便数据网格（datagrid）向下滚动时这些冻结行总是被显示在顶部。该方法自版本 1.3.2 起可用。
+toolbar:datagrid的头部工具栏属性。
+getSelections: 	返回所有选中的行，当没有选中的记录时，将返回空数组。
+pagination：设置为 true，则在数据网格（datagrid）底部显示分页工具栏。
+/\/\/\/\/\treegrid:
+树形网格（treegrid）用于以网格形式显示分层数据。它是基于数据网格（datagrid）的，并结合了树视图（treeview）和可编辑网格
+idField:定义标识树节点的键名字段。必需。
+treeField：定义树节点的字段。必需
+
+/\/\/\/\/\jqGrid：是一款处理表格展现的jQuery插件，支持分页、滚动加载、搜索、锁定、拖动等一系列对表格的常规操作。
+delRowData：删除id = rowid的行。但不会删除服务器上的数据。
+
+$.post():请求从服务器载入数据
+jQuery.post(url,data,success(data, textStatus, jqXHR),dataType)
+data是plainObject简单对象
+
+该函数是简写的 Ajax 函数，等价于：
+
+$.ajax({
+  type: 'POST',
+  url: url,
+  data: data,
+  success: success,
+  dataType: dataType
+});
+confirm() 方法用于显示一个带有指定消息和 OK 及取消按钮的对话框。
+
+
+
+<script type=text/javascript>的类型定义多余
+funtion 函数名称（参数）{函数体}javascript的函数也是一个对象
+代码” ${pageContext.request.contextPath}”的作用是取出部署的应用程序名，这样不管如何部署，所用路径都是正确的。 
+$（“#”）是指选择器选择带有id的元素，
+遇到问题：406 Not Acceptable，message:description The resource identified by this request is only capable of generating responses with characteristics not acceptable according to the request "accept" headers ()
+由于我要返回的是json数据，而浏览器接受的是text/html;charset=UTF-8文本类型
+
+function的命名方式：简洁跟描述性强的，两个单词以上的的加下划线
+方法链：当方法的返回值是一个对象时，这个对象还可以继续调用其他方法，这种方式通常称为链或级联
+嵌套函数：内部函数可以调用外部函数的参数
+关键字this没有作用域的限制，嵌套的函数不会从调用他的函数继承this，
+（funtion（）{
+
+   }（）;）//直接定义一个匿名函数，并在单个表达式中调用；
+   
+   
+   用clear来限定。而overflow:hidden是父模块对子模块来用的；
+   
+   document，DOM 的笔记： http://www.mzwu.com/article.asp?id=3490
+   整个网页都可以看成一个树,Window>document >标签元素(form  button span)，当我们给一个元素绑定事件是，最终会一路往上，触发祖先元素。
+   对绑定事件四种方法总结：
+    ·用.bind()的代价是非常大的，它会把相同的一个事件处理程序hook到所有匹配的DOM元素上；
+    ·不要再用.live()了，它已经不再被推荐了，而且还有许多问题；
+    ·.delegate()会提供很好的方法来提高效率，同时我们可以添加一事件处理方法到动态添加的元素上；
+      我们可以用.on()来代替上述的3种方法；
+	  
+	  live和click绑定事件的区别：
+	  重新加载过来的html是不会继承原来的事件，如果用click则需要重新绑定，而用live则依旧能实现效果。
+	  
+	  
+jQuery.parseJSON()函数用于将格式完好的JSON字符串转为与之对应的JavaScript对象。
+jQuery.parseJSON()将JSON字符串转换为JSON对象;JSON.stringify()将对象转换为字符串
+之所以用这个是因为@responseBody:这个注解表示该方法的返回结果直接写入HTTP response body中，一般在异步获取数据时使用，在使用@requestMapping后，
+返回值通常解析为跳转路径，加上@responsebody后返回结果不会被解析跳转路径，而是直接写入HTTP r中。在异步获取数据，加上responsebody后，会直接返回json数据。
+返回的数据异步的话，会在ajax的success属性里面获得。
+
+$(selector).each(function(index,element))  each ()方法规定每个匹配元素规定的函数
+ifames元素会创建包含另外一个文档的内联框架（即行内框架）。属性src:规定在iframe中显示的文档的URL。
+布局（layout）是基于面板（panel）创建的，各区域面板提供动态加载内容的内建支持。使用动态加载技术，可以让他们的布局页面更快的显示。
+
+<a>标签中 rel属性是 ——规定当前文档与被链接文档之间的关系。
+<iframe> 这个行内框架，是不能跟外面板进行交互，无法从网页面查看源码
+  这个元素会创建包含另外一个文档的内联框架（即行内框架）。
+ 
+ easyUI：验证两次输入密码的一致
+ 
+ validate验证框——
+     required,定义字段是否应被输入
+     validType,定义字段的验证类型，比如email，url，及自定义"equals[#选择元素]"
+	 当要自定义验证规则，就得重写$.fn.validataebox.defaults.rules,应该叫扩展
+	 使用的时候先引入jquery.easyui.min.js文件再引入plugins/jquery.validatebox.js(这里拿validatebox组件说事)文件，这样就起到了覆盖定义的效果
+	 
+	 <filedset>fieldset元素可以将表单内的元素分组，生成一组相关表单的字段。<fileset>标签没有必须或唯一的属性。
+	 选择器：
+	 .class
+	 #id
+	 ：link选择未被访问的连接
+	 ：visited选择所有已被访问的链接
+	 ：hover 选择器用于选择鼠标指针浮动在上面的元素，这个选择器可用于所有元素。
+	 
+	 
+	 parseJSON（）
+	 $.parseJSON()只支持标准的JSON,不标准的还是用eval（"+data+"）吧
+	 标准的就是key和value都带引号的。
+	 但是jQuery3.0开始已经过时，使用JSON.parse方法代替，解析JSON字符串。
+	 @responseBody表示该方法的返回结果集直接写入HTTP response body中，一般在异步获取数据时使用，在使用@requestMapping后，
+	 ajax的contentType(内容类型)：指定客户端传给服务器的 data的内容类型。
+	 
+	 <button> 控件 与 <input type="button"> 相比，提供了更为强大的功能和更丰富的内容。input一般都是空标签
+	 <button> 与 </button> 标签之间的所有内容都是按钮的内容，其中包括任何可接受的正文内容，比如文本或多媒体内容。
+	 例如，我们可以在按钮中包括一个图像和相关的文本，用它们在按钮中创建一个吸引人的标记图像。
+	 
+	 重要事项：如果在 HTML 表单中使用 button 元素，不同的浏览器会提交不同的值。Internet Explorer 将提交 <button> 与 <button/> 之间的文本，而其他浏览器将提交 value 属性的内容。请在 HTML 表单中使用 input 元素来创建按钮。
+	 注释：如果在 HTML 表单中使用 button 元素，不同的浏览器会提交不同的按钮值。请使用 input 元素在 HTML 表单中创建按钮。
+	 请始终为button规定 type 属性。Internet Explorer 的默认类型是 "button"，而其他浏览器中（包括 W3C 规范）的默认值是 "submit"。	 
+	 表单里的input标签，type为button，点击会直接提交表单？？？
+	 
+	 ajax的error函数：
+	   dataType错误，后台返回的dateType类型和前台不一致。
+	   async请求同步异步问题，async默认是true(异步请求),如果想一个Ajax执行完后再执行另一个Ajax, 需要把async=false
+	   data不能不写，data为空也一定要传{}
+	   URL问题，路径不能没有中文。
+	   
+	   contentType默认属性：get方式，参数是跟在url后边，与Content-Type无关。contentType不影响
+	   post方式，contentType默认为application/x-www-form-urlencoded
+	   当换成其他的//contentType: "application/json; charset=utf-8",//(不可以)
+       //contentType: "text/xml",//(不可以)
+	   
+	   $.ajaxSetup()函数没有返回值，返回undefind,用于设置AJAX的全局默认设置。
+	   该函数用于更改jQuery中AJAX请求的默认设置选项。之后执行的所有AJAX请求，如果对应的选项参数没有设置，将使用更改后的默认设置。
+	   
+form表单参数中会有一个enctype的参数。enctype指定了HTTP请求的Content-Type。
+默认情况下，HTML的form表单的enctype=application/x-www-form-urlencoded
+
+doncument对象和jQuery对象的区别：
+普通的dom对象一般可以通过$()转换成jquery对象。jQuery是将document对象封装之后的对象。
+需要注意的地方：
+1.选择器的写法 "#id" ''
+2.方法的写法  html()  innerHTML
+
+///JavaScript文件存放位置
+客户端JS 依赖浏览器提供的JS引擎解析执行,提供对DOM的解析
+服务端JS 不依赖浏览器,由特定运行环境提供的JS引擎解析执行,例如Nodejs及V8引擎
+两者的API会不同,但会有一个交集
+
+javascript在创建之初就是为了解决在客户端实现表单的验证，以免让服务器承受更多的压力，所以javascript是在客户端解析的。
+js跟html、css代码一样，都是客户端的浏览器在解析代码,
+对这3种文件，服务器只是作为一个储存的地方，服务器主要还是用来运行数据库和逻辑层的代码（如 php，java等）
+
+////jQuery中绑定事件有三种方法：
+1、target.click(function(){});
+
+2、target.bind("click",function(){});
+bind是会在绑定阶段判断绑定事件对象target是否存在。（不会绑定到父节点上？？？）
+3、target.live("click",function(){});
+live方法，在click事件后判断对象target是否存在，所以live方法实现后来新增子元素的事件绑定。
+ on 
+ 
+ bootstrap的less文件是一个可重用的样式编译文件（很方便修改重复的地方，因为引入了变量和函数），你改了之后，拿到bootstrap或者其他第三方的网站上去编译，他会根据你的变成代码自动生成你想要的css文件
+/////////////////// 
+JSON的具体形式
+语法：   参考：http://www.cnblogs.com/ningvsban/p/3660654.html
+　　JSON.stringify(value [, replacer] [, space]) 
+
+    value：是必选字段。就是你输入的对象，比如数组，类等。 
+    replacer：这个是可选的。它又分为2种方式，一种是数组，第二种是方法。 
+
+　　情况一：replacer为数组时，通过后面的实验可以知道，它是和第一个参数value有关系的。一般来说，系列化后的结果是通过键值对来进行表示的。 所以，如果此时第二个参数的值在第一个存在，那么就以第二个参数的值做key，第一个参数的值为value进行表示，如果不存在，就忽略。
+
+　　情况二：replacer为方法时，那很简单，就是说把系列化后的每一个对象（记住是每一个）传进方法里面进行处理。 
+
+    space：就是用什么来做分隔符的。 
+
+　　1）如果省略的话，那么显示出来的值就没有分隔符，直接输出来 。
+　　2）如果是一个数字的话，那么它就定义缩进几个字符，当然如果大于10 ，则默认为10，因为最大值为10。
+　　3）如果是一些转义字符，比如“\t”，表示回车，那么它每行一个回车。 
+　　4）如果仅仅是字符串，就在每行输出值的时候把这些字符串附加上去。当然，最大长度也是10个字符。
+（1）对象是一个无序的“‘键/值’对”集合（有的语言中理解为object或record）。
+一个对象以“{”开始，以“}”结束。每个“名称”后跟一个“：”，“键/值’对”之间使用“，”分隔。
+例如{id:”1”,name:”张三”},很多网站上都是将键和值都用双引号括起来，像这样{“id”:”1”,”name”:”张三”},
+我认为在实际的项目中只需要把”值”括起来就可以了，也可以把双引号都改为单引号（值为true,false,null 或者整数除外）。
+
+（2）数组是值（value）的有序集合。一个数组以“[”开始，“]”结束。值之间使用“，”分隔。
+	 例如：[{id:”1”,name:”张三”},{id:”2”,name:”李四”}]
+
+（3）值（value）可以是双引号括起来的字符串（String）、数值(number)、true、false、null、对象(object)或者数组(array)。
+    对象(object)或者数组(array)可以嵌套。例如：{name:"Michael",address:{city:"北京",street:"长安街","postcode":100025}}
+    JSON.stringif（）生成漂亮格式的JSON字符串：
+ 
+  JSON.stringify 把一个对象转换成json字符串， 
+  JSON.parse 把一个json字符串解析成对象。
+  vardataObj=eval("("+data+")");//转换为json对象 alert(eval("{}"); // return undefined?alert(eval("({})");// return object[Object]
+ 
+ easyUI的datagrid：
+ styler 设置单元格样式，需要三个参数value，row，index
+ $('#datagridId').datagrid（'options'） 获取到options对象，可以通过这个对象多去到当前初始化对象的属性，得到或设置datagrid的所有属性
+  $('#datagridId').datagrid（'reload'） 重新加载。
+ 
+ ///////////////jquery对象的取值问题////////
+ 1.@responsebody后台返回来的数据是[\"id\":int a],通过eval("("+data+")")方法进行js格式处理时，一般获得的是一整个数组，直接取key是取不到的
+ 要map[0]才是当前的数组。
+ 2.jQuery选择器，当选择的对象是变量时，写法是  :$("[id='"+index+"']")
+ 3.object对象通过变量取值时，写法是： obj[key]; 或者是  eval("obj."+key);
+ 4.当通过异步提交，通过主键去后台查数据，向后台传送数据时，要自己拼接标准的json格式，但是拼接出来的是string类型，
+ 要通过JSON.parse（）转换成json对象传，后台才能把数据封装到bean中。
+ 
+ removeClass()方法从被移除移除一个或多个类。
+ 
+ 更新的时候可以写一个readonlyfiles,让某些选项能选中，两个id重复无法选中，导致效果无法实现。
+ 
+ HTML DOM element集合
+ elements 集合可返回包含表单中所有元素的数组
+ 元素在数组中出现的顺序和他们在表单的HTML源代码中出现的顺序相同。
+ 每一个元素都有一个type属性，其字符串值说明了元素的类型
+ 语法：
+ formObject.elements[].property
+ 例如：
+ formObject=document.getElementById()
+ property包括HTML标签的属性（text）
+
+
+
+ $.each()h和$().each区别：
+ $().each 多用于dom对象,$(input[name='']).each(funtion(index){
+ 
+ })
+ $.each(temp[],function(index,value){
+ }) 
+
+ 
+使form成为ajax提交的form
+$('#').form({'submit'    ---或在后面加$().submit();
+url:....,
+onSubmit:function(){},提交前出发
+success:function(data){}成功后返回
+})
+
+
+
+parseInt(number,type)这个函数如果不跟第二个参数来表示进制的话，默认是10进制

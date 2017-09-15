@@ -1,0 +1,372 @@
+ Tomcat正常启动，可以访问其主页，却不能访问webapp中的项目的jsp文件.
+ 1.web项目修改名字后，部署在tomcat下的文件名字不变，所以在网页上浏览的时候，会找不到路径。（或名字打错）
+ 2.tomcat打开空白，myeclipse-service-tomcat，部署的版本和实际打开的版本不匹配，及web项目部署到tomcat版本不对。
+ 404err：spring容器没扫描到controller包，配置classpath有错
+ tomcat打不开，mysql服务没打开。
+ css,js文件link路径不正确，显示不出来，如果文件放在css文件夹js文件夹内，link放相对路径时为css/..style.js   /  ...style.js
+部署到tomcat上的web项目修改名字时，tomcat文件夹下的webapp里的项目文件夹名不变，运行时会跳出404错误；
+
+sqlserver 2008 用sqlserver身份登录时 出现18456错误，一个是SSMS配置服务器登录属性问题，还有就是SSMC的TCP/IP协议name pipes是否启动，
+最后是密码打错也会出现这个错误提示（.....）
+ 
+ sqlserver进行表数据插入时会提示“将截断字符串或二进制数据”：
+ 插入数据超出定义类型大小，注意（空）（格）（符），会一直跳出这个问题；
+ 
+myeclipse导入项目会提示已exit项目，项目删除不完整，删除点.project文件里项目名字，把在myeclipse里的隐藏起来的项目显示出来；
+在D:\MyEclipse10 Workplace\.metadata\.plugins\org.eclipse.core.resources\.projects底下有记录着。删除掉想要删除的则可以解决导入失败问题了。
+点击NON——shareproject
+
+修改项目名字要慎重：：：修改过的项目下的包，有时会自动在workspace里面出现，名字没变化，和修改过的包同时存在，删除掉，不然spring自动注入会扫描不到这个包，
+提示至少需要一个bean注入。
+
+Unsupported major.minor version 51.0:jdk版本不匹配
+49,50对应的是1.5和1.6  ，需要注意的地方是导入项目的版本要和自己配置的JDK版本一样，通过命令行java -version查看，导入项目JDK版本过高，需自行下载
+
+Mapping的映射文件,的sql语句回因为表名修改或大小不同找不到相应的值
+
+Could not set property 'adminid' of 'class com.kao.web.model.Admin'  ：property的名称一定要跟着改变
+
+css样式没有显示，多数是因为调用的css和js包没有完整导入，pannel面板没有生成，是因为jquery-easyui-min.js 没有导入到js文件夹
+
+新导入的web项目的js文件会报错，需要对整个项目编码格式进行修改，如果还报错就单独对这个文件夹进行编码格式修改
+weblogic.xml配置的表头<weblogic-web-app>报错，改为<web-app>
+
+重新打开myeclipse时，里面的项目全泛型的主要目标是提高 Java 程序的类型安全。部不见了，原因是workspace改变了，解决方法：转化工作空间，首菜单下的switch workspace转化到以前的那个目录。
+
+evcard分页查询会弹出程序异常窗口（showbox），说明已经调到JS里面，那就是参数传递的问题，检查控制层走到哪一步，最后查到mapper.xml文件里的select的id配置不一致。
+
+Connection refused: connect异常，原因是数据库没有成功连接，密码错误或服务器未开启。
+
+javascript没有绑定事件的时候，一定要记得调用，在函数外部直接调用，不然不会执行方法内部的函数。
+
+CSS样式没有效果，icons没有效果，原因是image包会冲突，
+
+var path = "<%=request.getContextPath()%>";这个path是用在指定发送请求的路径时使用，获得是站点的根路径
+
+if("mysql".equalsIgnoreCase(dbType)){
+					sb.append(originalSql).append(" limit ").append(startRow).append(",").append(endRow);
+	
+	if("mysql".equalsIgnoreCase(dbType)){
+					sb.append(originalSql).append(" limit ").append(startRow - 1).append(",").append(page.getPageSize());
+					
+					配置mysql数据库时，分页查询实现遇到问题：
+					1.debug运行，发现page对象值为空，于是检查interceptor拦截器，发现没跳入；
+					2.检查mybatis框架的配置文件，原来是拦截器的配置被注释掉了，去掉注释；
+					3，拦截器正常跳入，但是获取sql的数据为空，打开数据库执行搜索语句：SELECT*FROM ma_student WHERE 1=1 ORDER BY sid LIMIT 1,10；发现无数据，改limit为0，因为就一行数据
+					于是修改append(startRow)为append(startRow-1)，最后改.append（endRow）为.append（page.getPageSize）是获得page的长度，
+					其实是因为这句语句：int startRow=(page.getPageNo()-1)*page.getPageSize()+1；因为mysql记录的位置从零开始的，里面后面加了个1，所以
+					startRow其实从1开始了。
+
+在ssm框架下实现多行删除时碰到问题：java.lang.Integer cannot be cast to com.kao.web.model.Student：mapper接口的返回类型错误
+
+在窗口添加数据插入的数据为中文时跳出错误：
+  Illegal mix of collations (latin1_swedish_ci,IMPLICIT) and (gbk_chinese_ci,COERCIBLE) for operation '='
+  ### The error may exist in file [F:\apache-tomcat-7.0.73\webapps\DogRun\WEB-INF\classes\com\kao\web\dao\mapping\SubjectSelectMapper.xml]
+解决问题：
+查看表字段编码：
+  show full columns from `ma_select`;
+  修改字段编码：
+  ALTER TABLE `ma_select` CHANGE `subjectName` `subjectName` VARCHAR( 45 ) CHARACTER SET gbk COLLATE gbk_chinese_ci NOT NULL;
+ 
+在调用js文件时，获取的json返回值是undefined:
+ typeof的运算数未定义,返回的就是 "undefined". 
+ JS里面的typeof 使用：
+   typeof 运算符返回一个用来表示表达式的数据类型的字符串。 
+可能的字符串有："number"、"string"、"boolean"、"object"、"function" 和 "undefined"。
+解决方法：    
+	$(rows[j]).attr(jsonParamId[i]) 是取对象属性的值。通过$取到rows[]里面的值，然后设置给jsonParamId[]
+	所以前端JSP传给JS的值，如字符串必须要和datagrid的行 对象的属性一致。
+	
+添加语句报错：Field 'teacherName' doesn't have a default value
+   往后台传输数据时没有拿对象值，原因是前端datafgrid的columns没有对应好Javabean的属性，后台的mybatis xml文件没有拿到值
+     javabean的get和set的名字默认是属性首字母大写，如果修改过表字段时 ，要多注意这一点。
+	 
+JSP插入数据到数据库中文显示乱码：         参考——https://www.testwo.com/blog/6930  http://blog.csdn.net/hu_shengyang/article/details/38564425
+                                                  >>http://www.jb51.net/article/38122.htm
+	 
+	 注意：：SET character_set_client = utf8; (此种方式只在当前状态下有效，当重启数据库服务后失效。)
+	 
+	 show variables like 'character%'; 
+	 通过查询结果显示可以看出 数据库编码为拉丁语，需要修改为gbk或utf8.
+character_set_client为客户端编码方式；
+character_set_connection为建立连接使用的编码；
+character_set_database数据库的编码；
+character_set_results结果集的编码；
+character_set_server数据库服务器的编码；
+只要保证以上五个采用的编码方式一样，就不会出现乱码问题。
+
+无法启动MYSQL服务”1067 进程意外终止”解决办法:一般都是my.ini文件里面内容有问题，或者读取不到这个文件。
+
+前端传值到后台时，中文传递过去的是乱码：
+  web.xml 文件加载，如果编写了编码过滤器，配置的<filter-class>为org.springframework.web.filter.CharacterEncodingFilter这个类
+  本来这个类的作用：解决当前台JSP页面和java代码中使用了不同的字符集进行编码的时候就会出现表单提交的数据或上传/下载中文名称文件出现乱码的问题，进行编码转换
+  但是我的问题就是这个过滤器有问题。
+  
+ java.lang.ClassCastException：cannot be cast,强制转换异常。
+ 
+ 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。
+    解决方法是：检查服务是否打开，不是这个问题，就关闭server，打开SqlServer Manager修改TCP/IP协议，选一个IP修改IP地址为127.0.0.1
+	活动和已启用设置为启动，最后修改IPAlld的TCP端口为1433；
+  
+ javascript的live绑定事件，button点击无效：
+  jQuery的版本不对，1.7以后就不推荐live,die之类的写法，底层确实都是on调用。
+$(document).on("click",".add_bnt",function(){});
+延迟绑定到document
+
+事件代理机制，使用on绑定事件，要确保元素已经存在dom中，而使用live绑定事件，是说绑定在document上，document是一直都存在的。
+  
+js无法获取页面元素的值：
+   	    var u = $("input[name='username']");
+		var p = $("input[name='password']");
+		获取input便签name为username输入的值，并赋值给对象
+		
+Javascript - Uncaught ReferenceError: function is not defined 
+ 解决方法：
+1.jQuery库文件的路径不对，检查文件路径是否正确一般就能解决该错误。
+2.如果库文件的路径是正确的，那么可能在html中加载jQuery库文件顺序有误，如果将jQuery库文件加载放到最开始位置，即可以解决该错误。
+
+
+java的常见的错误异常：
+   空指针，数据溢出，cast类型转换失败。
+   
+ 因为要实现针对不同对象实现展示不同的菜单栏，在创建表的时候，为一个角色ID绑定多个菜单编号的时候，
+ 插入数据出现了问题，角色ID为主键，不能一对多，主键不能重复，
+ 解决方法：把角色ID和菜单项ID同时设为主键，两个主键合起来的ID不唯一。
+ 
+ 
+ 加载easyUI的图表时，icons.css的路径没有读取到图片，解决方法；url路径返回上一级菜单，把icons/图片名.png修改为../icons/图片名.png 
+ 
+ java.io.FileNotFoundException:拒绝访问，这个一般是使用FileOutputstream，是因为你访问了一个文件目录，而不是文件，
+ java.lang.ClassNotFoundException: org.apache.xmlbeans.XmlException 是因为官方包里默认是不包含xmlbean.jar包的，需要自己添加xmlbeans.jar这个包
+ 
+ 
+ 遇到问题：
+   创建项目时，按照框架搭建，当在包下面建立字包时会出现并行包的问题，当包下面没有文件时，如果在当前包下面建立字包，
+   myeclispe会默认把这两个包当成并行包。
+ 解决问题：开始是认为classpath文件配置有问题，只需要先在空包下面建立一个新的空文件，再建立新的字包，新的字包就会包括在之前的包中。
+ 
+重新打开项目出现红色感叹号：
+   修改JDK版本之后，选择左侧菜单中的"java compiler",选择匹配的jdk版本。
+   需要注意的地方，从外部导入的jar包，会出现引用jar包的位置不对，需要最好是在自己项目下键个LIB文件夹存放jar包。
+   
+ java程序中没有错，但是项目上显示一个红叉的解决方法：
+ 项目中有小红叉我遇到的最常见的情况：
+
+1、项目代码本身有问题。（这个就不说了，解决错误就OK）
+2、项目中的jar包丢失。（有时候eclipse打开时会出现jar包丢失的情况，关闭eclipse重新打开或者重新引入jar包就OK）
+3、从外部导入的项目，项目中引用jar包的位置不对，这个在“项目右键》Bulid Path》configure Build Path》Libraries”中调整包的位置就OK。
+4.修改过的jdk版本，要在java compare，选择匹配JDK版本
+这些常见的都确定无误后，
+找到 project Facets点开，修改里面的java标签的jdk版本version，匹配修改好的jdk
+
+css是.的，元素通过class指定，是#通过id指定
+
+遇到问题：js通过document.getElementById取不到radio的值
+js怎么取radio的值，radio的值不能像type=text一样，可以通过document.getElementById().value
+只能是根据form的id再取其控件元素的name的取值的方法：document.getElementById("formid").radioname
+或者是document.getElementByName("radioname");
+getElementByName的缺点是，不管你是否选中radio，它最后返回的数组的长度都是form下的所包含的所有的radio数组长度。
+可以getElementByID先获取到radio在获取其value，再判断用户是否选中radio。
+
+
+
+
+
+遇到错误：参数个数不对
+Wrong number of arguments.
+Usage: java org.apache.log4j.net.JMSSink TopicConnectionFactoryBindingName TopicBindingName username password configFile
+解决方法： 
+  URL的路径下无权限创建文件，缺少\到下一层。
+  java下的路径"\\"="/" 直接用"\"是读不到的
+
+
+  遇到错误：button提交表单
+  if (result == "") {
+			alert("用户名不能为空");
+			return false;
+		} else if (password == "") {
+			alert("密码不能为空");
+			return false;
+		} else if (role1 == "") {
+			alert("请选择角色！！！");
+			return false;
+		} else {
+			document.getElementById("formElem").submit();alert(222);
+		}
+	如果设置button的type为submit，那么给button绑定的方法返回的Boolean属性无效，点击之后，表单会直接被提交，
+	解决方法是在表单 添加属性onSubmit"return function()"这个才能通过方法返回值做下一步操作。
+	button属性为普通button，则可以直接执行方法操作之后，在通过绑定事件提交表单。
+  
+ \\\\\\\\\\\\\\\\\\\\\\\\\\
+   myeclipse无故弹出An internal error has occurred. java.lang.NullPointerException
+   解决方法：
+     1、首先关闭MyEclipse工作空间。
+     2、然后删除工作空间下的“/.metadata/.plugins/org.eclipse.core.runtime/.settings/com.genuitec.eclipse.ast.deploy.core.prefs”
+        在这个文件中存储了一些部署项目的信息。删了这个部署的项目的信息就没有错误了。
+
+	更新SVN 项目时遇到问题：Open the Java build path property page of project 
+	编译器版本没有那么高，所以就出现了问题。
+	解决方法是，更换你的jre版本
+	关键的地方是当我更新完项目后，如果要更新项目的JDK版本，要注意两个地方
+	1.java build path添加libra后选择好版本；
+	2.一定要检查java Compiler里面的Compiler compiler level：对应的版本。
+	myeclipse 10 的编译器不支持JDK8 。
+	Tomcat的JDK版本也需要手动修改，不然无法部署项目。
+	
+	前端传参数到后端中文乱码：  http://www.tuicool.com/articles/mmAv6r
+	
+	解决方法，string s = new string(request.getparameter("").getBytes(ISO-8859-1),"")
+	老版的Tomcat只有一种编码格式，就是ISO-8859-1，所以传到服务器时，是ISO-8859-1编码格式的数据，后台的java.class是GBK，显示的当然是乱码
+	即使是JSP页面 charset设置为GBK，但是value default的值依旧是"ISO-8859-1",tomcat编码格式是问题所在。
+    
+	还有：@requestBody
+	org.springframework.http.converter.StringHttpMessageConverter
+	这个HttpMessageConverter消息转换器 默认的转换编码格式为欧洲编码。
+	public static final Charset DEFAULT_CHARSET = Charset.forName("ISO-8859-1");
+chrome下运行编写的JavaScript代码时，在工具javascript控制台下有时会出现“Uncaught SyntaxError: Unexpected identifier ”的报错，经过我反复查看代码最后得出，原来是代码中缺少一个“,”（英文逗号）。
+后经在网上查阅，也有文章指出，如果该异常出现在define里多半是因为你在该行的上一行缺少了逗号。
+原来如此简单！
+在js中出现下面的错误：
+Uncaught SyntaxError: Unexpected identifier可能的原因是：
+有可能是字符串类型的，但是并没有加双引号。
+如：
+document.getElementById('s3_selectCustomName').value=customName;
+可能会出现上述错误。改正方法：
+document.getElementById('s3_selectCustomName').value="customName";
+这样即可！
+
+遇到错误：js异常问题unexpected string
+这个错误一般是 没有正确录入 框架定义的字符串。
+$(function(){})隐藏，等待文档加载完成。
+
+@responsebody注解无法返回string类型的方法值，不能跳进ajax的success，直接跳进error，换成map，list可以，
+
+ajax提交表单：报错status code：400    http://www.th7.cn/web/ajax/201607/176365.shtml
+  
+  提交数据为数字正常，数据为中文报错，表单序列化异常，
+  一般最常见的就是后台的实体类bean与前台穿过的类型不匹配，
+  如你的javabean中有定义了Date类型和int类型的成员变量，导致转化器在把json数据转化成bean时不能转化。
+  把实体类的javabean里边的类型都改成string类型，在配置SQL语句时用数据库函数to_date或者to_number转化的，
+  如果再java中用到这个字符串类型的日期的话，有必要的话，就用For format=new SimpleDateFormat("yyyy-MM-dd"),format.parse()来转换。
+  
+  请求发送给服务器的数据格式为JSON时，格式不标准，导致中文乱码
+  例如：
+  contentType:application/json（默认为）
+  data：{'name:'+$('#name').val()}//不标准
+  data：{"name":$('#name').val()}//标准格式
+  
+  
+   JS函数执行之后，按我的意思应该是执行一定功能之后跳转到另一个页面，但是代码如上好像是将我的表单提交了，并没有起到按钮的作用。而将<button>标签移到<form>外就能达到效果。
+      1.百度解决方案，说在button中加入type="button"属性就可以了，尝试之后无效。
+      2.基本同样道理，说用<input type="button">标签代替button，呵呵，所以同理的，无效。
+      3.最后找到问题所在，因为我调用的JS函数名字有问题，可能是submit这种类似关键字什么的，不能使用，改换了函数名之后，上面两种方法都有效了。
+	  同样还有我名为delete()的函数，名字也不能用；之前数据库里的条目也曾因为命名而出问题。
+      根据前辈们的总结，在表单了为了避免不必要的麻烦，button都应用input的标签代替比较好。
+	  
+	  
+	 form表单里面的button点击，会自动提交表单，只有两个原因，一个是没设置button的type，默认是submit
+	 如果设置type为button还是会提交，基本上是 调用外部JS文件，里面给这个button绑定了事件，也会自动提交表单
+	 
+	给a标签绑定事件时，href属性不能为路径，会发生直接跳转，应该改为#，如果需要获取其路径使用别名（my_href）然后通过attr()来获取。
+	拼接好的的HTML可以通过empty（）,append()方法直接加载。
+	
+	 comm.js的showUpdate怎么获取到updateUrl？？？
+	 
+	 
+	 datagrid的getSelecctions是获取所有的行，没有指定的数组下标，无法取到值，可以使用它的getSelected方法，直接返回选中一行当前数组对象。
+	 
+	 碰到项目部署环境问题：
+	   每次重新打开myeclipse，加载workspace下的项目，厦门分行项目总是出现大红色感叹号，lib包下的jar已全部导入，但每次都要重新添加，才会恢复
+	   解决方法是 web deployment Assembly 这个里面没有添加lib包的环境。
+	   主要原因是classpath配置文件下缺少
+	   	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="var" path="TOMCAT_HOME/lib/servlet-api.jar"/>
+	<classpathentry kind="var" path="TOMCAT_HOME/lib/jasper.jar"/>
+	<classpathentry kind="var" path="TOMCAT_HOME/lib/jsp-api.jar"/>
+	<classpathentry kind="var" path="TOMCAT_HOME/lib/el-api.jar"/>
+	<classpathentry kind="var" path="TOMCAT_HOME/lib/annotations-api.jar"/>
+
+	   参考文献：http://blog.csdn.net/fengyie007/article/details/1780375/
+	 PermGen space,指内存的永久保存区域outofmemoryError:PermGen space内存溢出，这一部分用于存放Class和meta的信息，class在被load的时候被放入PermGen space,
+	    他和存放的Istance和Heap区域不同，GC不会在主程序运行期对permgen space 进行清理。
+		所以如果你的APP会LOAD很多CLASS的话,就很可能出现PermGen space错误。这种错误常见在web服务器对JSP进行pre compile的时候，
+		如果你的WEB APP下都用了大量的第三方jar, 其大小超过了jvm默认的大小(4M)那么就会产生此错误信息了。
+		查看Tomcat的内存，http://localhost:8080/manager/status
+	 
+	 碰到问题：Unparseable date 如果日期格式是AM，PM，后面要加上Locale.ENGLISH，例如：（"hh:mm:ss a",Locale.ENGLISH）
+	 
+	 碰到问题：两个表级联失败，原因是读取Excel时没有设置单元格的格式，导致读取的数字的精度不同，级联时提示失败。
+	 
+	 Mybatis传递多个参数碰到错误：
+	 当只传一个参数到sql语句时，可以直接写参数名，当传多个参数时，应当这样写(多个参数已#{0}开始)：
+	 例子：SELECT * FROM `user` WHERE LoginID=#{0} and LoginPwd=#{1} AND Role=2
+	 
+	 post请求，@requestMapping 路径无法跳转：
+	 通过Ajax请求的数据返回的是字符串，不会进行跳转
+	如果要需要重定向，在Ajax请求的成功回调中执行window.location='/hello'就可以了
+	
+	导入jstl标签库时报错：
+		 The JSP specification requires that an attribute name is preceded by whitespace
+		 解决方法是导入语句，属性之间少了个空格，加上就好。
+		 According to TLD or attribute directive in tag file, attribute value does not accept any ex。。。
+		 解决方法是版本不兼容的问题
+		 将JSP页面中的<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>改成<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>。
+		 在jstl-1.0.2.jar下的META-INF中有一个c.tld还有一个c-rt.tld,后一个好像是jstl核心库备用板的标签描述文件。
+		 
+	
+	重新打开myeclipse后，发现只有日报文件，其他文件项目没有显示，以为是路径问题，修改后重启无效。
+	解决方法：
+	package菜单栏下面有个UP文件图标，返回上一层文件。
+	 
+
+	 ajax请求删除数据成功后，控制层返回数据没有问题，但是error方法会报错，错误状态为0：
+		解决方法为：页面不存在或刷新太快导致，例如：用a标签作为事件触发删除数据，href有指定路径，ajax的success方法
+		也具有刷新当前界面的语句，就会出现这类错误。
+	 
+	 mybatis的拦截器报错：没有设置参数1的值
+		解决原因：缺少语句
+				
+				BoundSql countBS = copyFromBoundSql(mappedStatement, boundSql, countSql);
+			    DefaultParameterHandler parameterHandler = new DefaultParameterHandler(mappedStatement, parameterObject, countBS);
+			    parameterHandler.setParameters(countStmt);
+				例子：and city = #{city,jdbcType=VARCHAR}
+				拼接sql语句，city参数没有设置值。
+				
+	解析xml文件时报错：
+	org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; 前言中不允许有内容。
+	解决方法：
+	修改文件保存编码格式utf-8改为：utf-8-无bom格式编码
+	
+	 xml中1字节的UTF-8序列的字节1无效 
+	 解决方法：
+	 把inputstream里面read（）的byte[]数组字节，转换为字符串，用new string（byte[],int offset,length）方法
+	 
+	 socket通信的阻塞，服务器端有accept()方法实现，客户端可以用流的read()方法，不然运行客户端会直接走完方法，socket.getinputstream()将不会
+	 取到值，myeclipse运行时，会打开两个虚拟机，在两个不同的控制台输出。
+	 
+	 document.parse（）解析文件里面  有两个xml文件，报错
+				
+	 
+HTTP请求415错误——不支持的媒体类型
+
+SSM框架配置文件报错：the root element of the document is not <xsd:schema>
+	http://blog.csdn.net/wujiang88/article/details/51992836
+	spring在加载xsd文件时总是先试图在本地查找xsd文件(spring的jar包中已经包含了所有版本的xsd文件)，如果没有找到，才会转向去URL指定的路径下载。
+	
+	总结：
+为什么不要在Spring的配置里，配置上XSD的版本号？
+因为如果没有配置版本号，取的就是当前jar里的XSD文件，减少了各种风险。
+而且这样约定大于配置的方式很优雅。
+
+
+
+HTTP 400错误   这个错误说明没有进入到后台服务器
+	原因：前端提交数据的字段名称或者字段类型和后台的实体类不一致，导致无法封装；
+
+HTTP 500错误
+
+将截断字符串或二进制数据。插入数据超出字段长度。	
+
+
+java.lang.IllegalStateException

@@ -1,0 +1,251 @@
+管理端添加卡物理号批量导入功能
+
+一门是莱斯大学在 Coursera 上开的《Python交互式编程导论》，一边学 python，一边写些小游戏，肯定不会觉得无聊；
+另一门就是 MIT 在 edX 上开的《计算机科学及python编程导论》，它是 MIT edX系列课程（XSeries）中的第一课，系列课程共两门，除了这门课以外还有《计算思维及数据科学导论》
+
+《简明 Python 教程》
+《深入 Python》
+《Python交互式编程导论》
+《计算机科学及python编程导论》
+
+
+JS文件 
+a.js里面的内容如下:
+function showTime(){
+   var time = new Date();
+   alert(time);
+}
+
+写一个html文件 文件名暂定为 b.html(把a.js和b.html放一个文件夹)
+b.html里面的内容如下：
+
+<html>
+<head><title>time<title/>
+<script src="a.js" type="text/javascript"></script>
+<head>
+<body>
+点击显示时间：<input type="button" onclick="showTime()" />  //事件=" 方法（）"
+<body/>
+<html/>
+
+
+
+CSS 
+能够对网页中元素位置的"排版"进行像素级精确控制，支持几乎所有的字体字号样式，拥有对网页对象和模型样式编辑的能力。
+css的样式是要写在style之间的<style type="text/css">.....#stylename{color:red}</style> 
+调用<P id="stylename" >www.baidu.com</P>
+class属性是提供给样式表css用的，譬如jsp导入了123.css样式文件，然后里面的任何标签(包括form)的样式就可以定义在123.css文件中找，直接写<form class='form1" ，就可以让form定制一个叫form1的样式
+
+例子：
+123.css中：
+.form1{
+   height:100px;
+   width:50px
+   
+}
+然后form用<link/>标签引入123.css后，form中写class=“form1"后，样式就变成高度100，宽度50了。
+
+class引用样式表 其实就跟form中写style="height:100px;width:50px"效果一样
+
+
+EasyUI 
+easyui是一种基于jQuery的用户界面插件集合。jQuery是一个快速、简洁的JavaScript框架，是继Prototype之后又一个优秀的JavaScript代码库（或JavaScript框架）.
+jQuery的核心特性可以总结为：具有独特的链式语法和短小清晰的多功能接口；具有高效灵活的css选择器，并且可对CSS选择器进行扩展；拥有便捷的插件扩展机制和丰富的插件。
+easyui data-options传json
+$(#id)-->#取得是id，--$(.class)-->.是取class的值。     
+JSON：JavaScript 对象表示法（JavaScript Object Notation）。JSON 是存储和交换文本信息的语法。类似 XML。
+JSON 比 XML 更小、更快，更易解析。格式：名字/數據
+AJAX 不是新的编程语言，而是一种使用现有标准的新方法。
+AJAX 是与服务器交换数据并更新部分网页的艺术，在不重新加载整个页面的情况下
+
+一种是说明标签<%@ include  file="xxx.jsp"%>，一种是动作标签<jsp:include  page="xxx.jsp"/> ,说明标签是静态引入，动作标签是动态
+<jsp:param>子句能让你传递一个或多个参数给动态文件.
+如果这个包含文件是动态的，那么你还可以用<jsp:param>还传递参数名和参数值。
+request.getContextPage(),会获得什么值，做动态网站的时候，表单通常提交的action=<%=path%>/something.do这是相对路径，
+request.getContextPage(),context中没有PATH属性，工程文件在根目录下，所以会的到path=“”空，这个将获得一个虚目录
+<%=request.getContextPath()%>是为了解决相对路径的问题，可返回站点的根路径。
+
+document文档对象
+DOM实际上是以面向对象方式描述的文档模型
+创建XMLHttpRequest伪代码
+XMLHttpRequest request=new XMLHttpRequest();
+alert 向.....什么报警告 警觉的；
+
+getSelectData()时web页面调用来启动
+funtion getSelectData(){
+createRequest();
+var url="/board/ervlst/UpDateSales;"
+request.open("HEAD",url,true)；
+request.onCreatReadyStateChange=updatege;
+request.send(null);
+}
+输出HEAD获得响应内容
+funtion updatePage(){
+if(request.raedyState==4){
+alter(request.getALLResponseHeaders());
+}
+}
+参考博客：http://blog.csdn.net/zhangzeyuaaa/article/details/44560921
+
+session是一次会话，当浏览器关闭时重新计算，而application则是服务器关闭，部署在多个服务器例外，一般需要手动删除
+
+request           请求对象　            类型 javax.servlet.ServletRequest        作用域 Request
+
+response          响应对象              类型 javax.servlet.SrvletResponse        作用域 Page
+
+pageContext       页面上下文对象        类型 javax.servlet.jsp.PageContext       作用域 Page
+
+session           会话对象              类型 javax.servlet.http.HttpSession      作用域 Session
+
+application       应用程序对象          类型 javax.servlet.ServletContext        作用域 Application
+
+out               输出对象              类型 javax.servlet.jsp.JspWriter         作用域 Page
+
+config            配置对象              类型 javax.servlet.ServletConfig         作用域 Page
+
+page              页面对象              类型 javax.lang.Object                   作用域 Page
+
+exception         例外对象              类型 javax.lang.Throwable                作用域 page
+
+
+通过 XMLHttpRequest 对象与服务器进行对话的是 JavaScript 技术，Ajax 基本上就是把 JavaScript 技术和 XMLHttpRequest 对象放在 Web 表单和服务器之间。
+实现异步发送，提高交互性
+
+
+ES6标准引入了新的iterable类型，Array、Map和Set都属于iterable类型。
+
+constanId
+
+tabs()方法：
+$(selector,context).tabs(option);
+$(select,context).tabs("action",params);
+
+onload(装载)：它是一个事件有三种方式使用，body里面加载多个方法是用;隔开//window.onload=method-name。
+使用匿名函数>><script>window.onload = function(){alert(321);}</script>
+colummns :专栏,列的
+
+div的img路径最好是相对路径（注意斜杠方向），物理路径要加上file，绝对路径是无法显示出来，在同一层目录下的可以直接加图片名称
+
+overflow：hidden
+用clear来限定。而overflow:hidden是父模块对子模块来用的。当使用float，要清除浮动。
+通过 XMLHttpRequest 对象与服务器进行对话的是 JavaScript 技术，Ajax 基本上就是把 JavaScript 技术和 XMLHttpRequest 对象放在 Web 表单和服务器之间。
+实现异步发送，提高交互性
+
+
+ES6标准引入了新的iterable类型，Array、Map和Set都属于iterable类型。
+
+const let 
+
+tabs()方法：
+$(selector,context).tabs(option);
+$(select,context).tabs("action",params);
+
+delete from table_name where colummn_name;
+
+///////////////
+
+seasar：一种流行的JSP软件开发框架，类似于Spring Framework的开源框架
+attr()函数用于设置或返回当前jQuery对象所匹配的元素节点的属性值。
+
+onload(装载)：它是一个事件有三种方式使用，body里面加载多个方法是用;隔开//window.onload=method-name。
+使用匿名函数>><script>window.onload = function(){alert(321);}</script>
+colummns :专栏,列的
+
+div的img路径最好是相对路径（注意斜杠方向），物理路径要加上file，绝对路径是无法显示出来，在同一层目录下的可以直接加图片名称
+ 
+ 
+ datagrid的列（column）属性是一个数组对象，它的每个对象都是一个数组，元素数组的元素是一个对象，这个对象定义了每个列的字段。
+          formatter类型是function：单元格的格式化函数，需要三个参数：value//字段的值 rowData//行的记录数据 rowIndex//行的索引
+          style................. :单元格的样式函数，返回样式字符串来自定义该单元格的样式，..................................
+		  toolbar: 	数据网格（datagrid）面板的头部工具栏。可能的值：array,selector
+                    1、数组，每个工具选项与链接按钮（linkbutton）一样。
+                    2、选择器，只是工具栏。
+		   onLoadSuccess:事件，当数据加载成功时，触发
+		   combobox:组合框，显示可以编辑的文本框和下拉框。
+		   getData:返回加载数据；getPager：返回page对象
+jquery调用ajax请求的常见方法： 
+         $.ajax({ 
+		  type："POST/GET",默认为get
+		  url:发送请求的地址
+		  data:发送到服务器的数据，将自动转换为请求字符串格式/// data: "username=" + $("#TxtUserName").val().toString() + "&pwd=" + $("#TxtPassword").val().toString(),
+		  async:异步请求是否全局
+		 
+		 }
+jQuery Pagination分页插件：	Ajax分页插件，一次性加载，故分页切换时无刷新与延迟，如果数据量比较大时不建议用此方法，以为加载会比较慢	  
+
+		  
+<select id="status" name="status" constantId="status" style="width:180px" class="easyui-validatebox" data-options=" required:true,invalidMessage:'请选择流水状态',missingMessage:'请选择流水状态！'" ></select>
+
+easyui-vaildatabox(验证框)		  
+		  
+页面加载的顺序：JavaScript优先于DOM（哈哈哈哈,网页上下文，从上自下加载内容），alert()可以验证，提前跳出窗口，后输出<form>，document的ready事件函数，$(function {});
+		  
+--------------------------------------------------------------------------------------
+后代选取器(以空格分隔) 
+子元素选择器（以大于号分隔）>
+相邻兄弟选择器+
+普通兄弟选择器~
+ 
+----------------------------------------------------------------------------------------
+静态资源的处理
+	代理服务器"缓存代理服务器"
+	Cahe-Control:Cahe-Control='Cahe-Control'":"cache-directive(public所有内容都将被缓存)
+	
+	过期头(Expiress)
+	
+	
+-----------------------------------------------------------------------------------------
+bootstrap:
+	shift+tab
+
+    .container 类用于固定宽度并支持响应式布局的容器。(自适配，如果额外设置宽度，则失去响应式布局)
+
+    .container-fluid 类用于 100% 宽度，占据全部视口（viewport）的容器。
+
+	jade模板引擎
+	 块扩展 冒号记得加一个空格 不然不识别 如：li.first: a(href='#') foo
+	 
+	 
+Not allowed to load local resource:
+	说现在的浏览器为了安全考虑就是不允许直接访问了，但是可以弄个虚拟路径
+	
+	
+--------------------------------------------------------------------------------------------
+bootstrap的img-circle样式图片椭圆问题：
+
+.img-circle{border-radius:50%;}
+效果(因为本图片的宽高大小不同，所以呈现出椭圆，如果将width和height设置相同，那么会呈现出一个圆)	
+
+ Less 是一门 CSS 预处理语言，它扩充了 CSS 语言，增加了诸如变量、混合（mixin）、函数等功能，让 CSS 更易维护、方便制作主题、扩充。
+ 
+ nodejs环境 可以通过命令行编译 : lessc bootstrap.less bootstrap.css
+ 
+ 修改bootstrap默认堆叠的窗口大小：
+	varibles.less文件修改
+	@grid-float-breakpoint:     @screen-md-min;//992px ,sm 768px,
+	然后重新编译成css文件
+	
+	
+----------------------------------------------------------------------------------------------
+	html 里面的转义字符  &gt;  &lt;
+	
+	
+	
+	
+-----------------------------------------------------------------------------------------------
+https://www.zhihu.com/question/33453164
+怎么理解前端的dom,bom
+	document object model 文档对象模型 //就是为了操作 HTML 中的元素 ,document 通常是整个 DOM 树的根节点
+	browser objetc model 浏览器对象模型 //为了控制浏览器的行为而出现的接口。
+	
+	
+	BOM的核心对象是window,他表示浏览器的一个实例。window对象有双重角色，它既是通过javascript访问浏览器的窗口的一个接口，又是ECMAScript规定的Global对象。
+	全局变量不能通过delete操作符删除
+	
+	JavaScript =EcmaScript+Dom+Bom。
+	
+	
+------------------------------------------------------------------------------------------------
+Babel是一个广泛使用的转码器，可以将ES6代码转为ES5代码，从而在现有环境执行	
+	
+	

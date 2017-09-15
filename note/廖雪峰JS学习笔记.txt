@@ -1,0 +1,234 @@
+JavaScript的一个重要的特性就是单线程执行模式。
+在JavaScript中，浏览器的JavaScript执行引擎在执行JavaScript代码时，总是以单线程模式执行，
+也就是说，任何时候，JavaScript代码都不可能同时有多于1个线程在执行。
+
+
+闭包：他的主要特点是把方法包起来，然后通过函数里面的对象，去调用
+需要注意的地方：返回函数不要调用任何的循环变量，或者后续会发生变化的变量，解决方法：可以在创建一个函数，用该函数的参数绑定循环变量当前的值，无论该循环变量后续如何更改，已绑定到函数参数的值不变：
+在没有class机制，只有函数的语言里，借助闭包，同样可以封装一个私有变量
+
+const关键字定义一个常量，可以看成一个唯一不可重新赋值的变量；
+iterable类：map和set无法获取下标，和array同属于iterable类，这个类型集合可以通过for...of循环来遍历
+函数的定义：匿名函数需要在末尾加上;表示赋值结束。
+
+js中的$作用：（JQUERY的作者将之做为一个自定义函数名了，这个函数是获取指定网页元素的函数）后自己定义一个函数对象使用；
+function $(Nid){
+return document.getElementById(Nid);
+}
+这个实现的效果是document.getElementById(id)==$(id)
+
+datagrid：1.从已有的表格元素创建数据网格（datagrid），在 html 中定义列、行及数据
+2.通过 <table> 标记创建数据网格（datagrid）。嵌套的 <th> 标签定义表格中的列
+columns列镇，getpage这个方法返回的是分页‘page’对象
+
+JavaScript引擎有一个会在行末自动添加分号的机制，注意return name：张三；
+
+js'=='与'==='的区别：
+1.对于string等基本类型的区别，不同的类型之间，==是自动转换为同类型再比较值，===类型不同直接判断不相等
+同类型比较，都比'值'。
+2.对于array，object等高级类型，没有区别，比较的是'指针地址'
+3.对于==，将高级转化为基础类型，进行值比较
+因为类型不同，===结果为false；
+integer.valueof()方法得到intteger型数据，用来数据类型转换
+
+document 文挡对象 - JavaScript脚本语言描述，每个载入浏览器的 HTML 文档都会成为 Document 对象。
+Document 对象使我们可以从脚本中对 HTML 页面中的所有元素进行访问。
+注:页面上元素name属性和JavaScript引用的名称必须一致包括大小写
+document常用对象方法：
+document.write() //动态向页面写入内容
+document.createElement(Tag) //创建一个html标签对象
+document.getElementById(ID) //获得指定ID值的对象
+document.getElementsByName(Name) //获得指定Name值的对象
+document.body.appendChild(oTag)
+document.getElementById("j").innerHTML------js从jsp中获取数据
+
+///方法定义：
+在一个对象中绑定函数，称为对象的函数方法
+在一个方法内部，this是一个特殊变量，它始终指向当前对象。
+
+///高阶函数：
+JS的函数其实都是指向某个变量，既然变量可以指向函数，函数的参数能够接受变量，name一个函数就可以接受拎一个函数作为参数，这种函数就称为高阶函数。
+var run=(function(X,Y,F){
+              retrun f(x)+f(y);
+});
+
+///标准对象：
+JS也提供了包装对象（int和integer），创建关键字new，但尽量避免使用
+null和undefined没有to.string()，number需要注意123..toString(); // '123', 注意是两个点！
+1.Date对象获取系统日期时间，需要注意的是获取的月份要减一，号不用
+2.RegExp:var re1 = /ABC\-001/;
+  var re2 = new RegExp('ABC\\-001');
+  re1.test()用于测试给定的字符串是否符合条件
+3.JSON：字符集必须是UTF-8，且" "
+如果我们收到一个JSON格式的字符串，只需要把它反序列化成一个JavaScript对象，就可以在JavaScript中直接使用这个对象，反之同理
+
+///面向对象编程
+由于javascript中的原型链与Java中的'class'的区别就在于没有class概念，所有对象都是实例，所谓的继承关系不过是一个对象的原型指向另一个对象而已，
+1.创建对象
+javascript对每个创建对象都会设置一个原型，指向他的原型对象
+创建一个Arry对象：var arr=[1,2,3]  其原型链是arr>Array.prototype>object.prototype>null
+函数也是一个对象，他的原型链是>Function.prototype>object>null
+
+构造函数：可以用关键字new来调用这个函数，并返回一个对象（var xiaoming=new Student('xiaoming')）不写new就是一个普通普通函数
+
+2.原型继承
+构造函数构造函数constructor
+关键是创建一个空对象，使用封装好的inherits对象
+function inherits(Child, Parent) {
+    var F = function () {};
+    F.prototype = Parent.prototype;
+    Child.prototype = new F();
+    Child.prototype.constructor = Child;
+}
+	3.class继承
+	class privateStudent extends Student{
+	constructor(name,grade){
+	 super(name);//调用父类构造方法
+	 this.grid；
+	}
+	
+	
+	}
+	
+/// 浏览器对象
+
+window:不但充当全局作用域,而且表示浏览器窗口。可以获得窗口宽高。
+navigator：表示浏览器的信息
+screen：表示屏幕信息
+location：表示当前页面的URL信息，location.herf
+document：对象表示当前页面。由于HTML在浏览器中意DOM形式表示树结构，document对象就是整个DOM树的根节点。有cookie属性
+history：表示浏览器页面历史记录
+///  操作DOM（document object model 文档对象模型）
+
+DOM始终是一个树形结构。
+操作节点动作：
+更新：更新该DOM节点的内容，相当于更新了该DOM节点表示的HTML的内容；
+遍历：遍历该DOM节点下的子节点，以便进行进一步操作；
+添加：在该DOM节点下新增一个子节点，相当于动态增加了一个HTML节点；
+删除：将该节点从HTML中删除，相当于删掉了该DOM节点的内容以及它包含的所有子节点
+操作之前都得先拿到这个DOM节点，document.getElementById(),documnet.getClassName()
+
+更新DOM：一种是修改innerHTML属性，第二种是修改innerText或textContent属性
+
+///操作表单
+表单本身也是DOM树，HTML表达的输入控件可以接受用户输入，获取：input.value。
+表单的提交方式：方式一<form>元素的submit（）方法提交一个表单，例如响应一个button的onclick事件
+///操作文件 
+File API 提供了File和FileReader两个主要对象，可以获得文件信息并读取文件
+
+///Ajax 
+需要注意：AJAX请求是异步执行的，也就是说，要通过回调函数获得响应。
+promise对象最大的作用是在异步执行的流程中，把执行代码和处理结果的代码清晰的分离了
+Canvas是在HTML5引入的，它就像是一块幕布，使用JavaScript在上面绘制图表和动画等。
+    getContext('2d')方法让我们拿到一个CanvasRenderingContext2D对象，所有的绘图操作需要通过这个对象完成。canvas.getContext（'2d'）
+	也允许在Cancas中绘制3D图形：var draw3D=canvas.getContext（“webl”）
+	Canvas的坐标以左上角为原点，水平向右为X轴，垂直先下为Y轴，以像素为单位，所以每个点都是非负整数。
+
+////JQuery
+   简洁的操作DOM的方法：写$('#testid')简洁于document.getElementById（'testid'）
+   $符号：$是著名的jQuery符号，jquery吧所有的功能全部封装在一个全局变量jquery中，而$也是一个合法的变量名，他是变量jquery的别名
+          $本质上是一个函数，但是函数也是对象，于是$除了可以直接电泳外，也可以有很多其他属性。
+		  jQuery.noConflict()把原来保存的变量还原。
+    选择器：
+	按ID查找
+	    以#开头。返回的回的对象是jQuery对象，jquery对象类似数组，他的每一个元素都是引用了DOM节点的对象。
+	        例如---// 查找<div id="abc">:
+                       var div = $('#abc');
+					    返回的jQuery对象如下：
+                               [<div id="abc">...</div>]如果没有此id返回[]，不会返回undefined或null
+
+	按tag（标签）查找
+	    按tag查找只需要写上tag名称就可以了
+		
+	按class查找
+	    按class查找注意在class名称前加一个.
+	
+	层级选择器：
+	$('#test-ul li').text('JS'）。用空格符号隔开
+     document对象转换为jquery对象，就可以调用jQuery的API接口。
+	 
+////操作DOM  
+   注意，jQuery对象的所有方法都返回一个jQuery对象（可能是新的也可能是自身）
+   jQuery的API设计非常巧妙：无参数调用text()是获取文本，传入参数就变成设置文本，HTML也是类似操作	
+    attr()和removeAttr()方法用于操作DOM节点的属性：
+    操作表单： 对于表单元素，jquery对象统一提供val（）方法获取和设置对应的value属性。
+
+////事件
+    因为JavaScript在浏览器中以单线程模式运行，页面加载后，一旦页面上所有的javascript代码被执行完后，就只能依赖触发事件来执行javaScript代码。
+	其中，ready仅作用域document对象。由于ready事件在DOM完成初始化触发，且只触发一次，所以非常适合来写其他的初始化代码。
+
+	
+如果所取的元素没有初始化，那么会返回一个[]，页面加载的顺序是先JavaScript，之后才到DOM对象。
+由于ready事件使用非常普遍，所以可以这样简化：
+
+$(document).ready(function () {
+    // on('submit', function)也可以简化:
+    $('#testForm).submit(function () {
+        alert('submit!');
+    });
+});
+
+甚至还可以再简化为：
+
+$(function () {
+    // init...
+});
+
+上面的这种写法最为常见。如果你遇到$(function () {...})的形式，牢记这是document对象的ready事件处理函数。
+
+    事件参数
+	     如mousemove和keypress，我们需要获取鼠标位置和按键的值，负责监听这些事件就没有意义，所有事件都会传入Event对象
+	事件触发条件
+	    
+		
+////jquery操作ajax
+jQuery的全局对象jquery（也就是$）绑定了ajax函数，可以处理AJAX请求。$.ajax（）
+$.post() 方法通过 HTTP POST 方式向服务器发送请求并获取返回的数据。是 $.ajax() 的简化版                                   
+使用HTTP GET 方式向服务器发送请求请使用 $.get() 方法。
+contentType:发送POST请求的格式。
+  jquery提供的常用方法： 
+    get():$.get(
+	post():
+	getJSON:快速通过GET获取一个JSON对象。
+	
+扩展
+    jQuery内置的方法永远不可能满足所有的需求
+	给jQuery对象绑定一个新方法是通过$.fn对象实现的。函数内部的this在调用时被绑定为jQuery对象，所以可以正常调用jQuery对象的方法。
+	$.fn.highlight1 = function () {
+    // this已绑定为当前jQuery对象:
+    this.css('backgroundColor', '#fffceb').css('color', '#d85030');
+    return this;
+}
+
+jQuery插件的原则：
+
+     给$.fn绑定函数，实现插件的代码逻辑；
+     ！插件函数最后要return this;以支持链式调用；
+     插件函数要有默认值，绑定在$.fn.<pluginName>.defaults上；
+     用户在调用时可传入设定值以便覆盖默认值。
+
+////错误处理
+    try...catch...finally
+	当代码块被try { ... }包裹的时候，就表示这部分代码执行过程中可能会发生错误，一旦发生错误，就不再继续执行后续代码，转而跳到catch块。
+	catch (e) { ... }包裹的代码就是错误处理代码，变量e表示捕获到的错误。
+	最后，无论有没有错误，finally一定会被执行。
+
+  抛出错误---throw
+  isNaN() 函数用于检查其参数是否是非数字值。
+  
+ 错误传播
+     如果在一个函数内部发生了错误，它自身没有捕获，错误就会被抛到外层调用函数，如果外层函数也没有捕获，该错误会一直沿着函数调用链向上抛出，直到被JavaScript引擎捕获，代码终止执行。
+	 所以我们不必每一个函数内部捕获错误，只需要在合适的地方统一捕获。因为支持一个链式调用。
+	 但是涉及到异步代码，无法在调用时捕获，原因就是在捕获的当时，回调函数并未执行。
+
+underscore：使用统一的函数来实现map()，filter（）这些操作。这个函数为集合类对象提供了一致的接口，集合类是指Array和Object类
+jQuery在加载时，会把自身绑定到唯一的全局变量$上，underscore也一样，会把自身绑定到唯一全局变量 _ 上。
+
+在HTML里嵌入JavaScript
+放置在HTML事件处理程序中，该事件处理程序由onclick或onmouseseover这样的HTML属性值指定
+放在一个URL里，这个URL使用特殊的"javascript"协议//javascript:URL -href:javascript:function()
+
+在XHTML中，<script>标签中的内容被当做其他内容一样对待。如果JavaScript中包含了<或&字符，这些字符会被解释成为XXML标记，因此最好把所有的JavaScript代码放到一个CDATA部分里；
+<script><![CDATA[
+//javascript代码
+]]></script>

@@ -1,0 +1,100 @@
+银行侧发起签约：
+ 1.检验必要字段是否为空或合法性检验。
+ checkAcceptDate()-getErrorList(errorList)——checkAcceptDate(return errorList)——TradingAcceptRule.class
+ （它的行为十分类似public、final这样的修饰符）>>>>>http://blog.csdn.net/zhuojianhai88/article/details/17507503
+1.  编写文档：通过代码里标识的元数据生成文档。
+2.  代码分析：通过代码里标识的元数据对代码进行分析。
+3.  编译检查：通过代码里标识的元数据让编译器能实现基本的编译检查
+
+ annotation（注解） 自定义注解入门>>>>>http://www.cnblogs.com/peida/archive/2013/04/24/3036689.html
+ java 5.0 定义4个标准的meta-annotation类型《@target，@retention ，@documented,@Inherited》三个标准注解，四种元注解
+ ，@Inherited阐述了某个被标注的类型是被继承的。
+ 如果一个使用了@Inherited修饰的annotation类型被用于一个class，则这个annotation将被用于该class的子类。
+ 
+Java的反射机制，对于先编译再运行的语言来说，反射机制可以使代码更加灵活是一个（.class——>.java过程）（运行状态中）
+1.通过Object类的getClass()方法。例如：
+Class c1 = new String("").getClass();
+
+2.通过Class类的静态方法——forName()来实现：
+Class c2 = Class.forName("MyObject");
+
+3.如果T是一个已定义的类型的话，在java中，它的.class文件名：T.class就代表了与其匹配的Class对象，例如：
+
+Class c3 = Manager.class;
+Class c4 = int.class;
+Class c5 = Double[].class;
+
+2.判断会员信息表中是否存在客户卡信息
+BaseTradingService tradingService =  getTradingService()//return 一个交易动作service
+trandingservice.execute()——>doExecute()——>继承的子类重写doExecute方法，动态绑定实现多态过程，如果某个方法是静态的，那么他的行为就不具备多态特征（向下转型）
+{//http://blog.csdn.net/xyh269/article/details/52231944
+问：如果我们要用一个子类实例对象，先是生成子类实例赋值给父类引用，再将父类引用向下强转给子类引用，这不是多此一举？？？
+答：很多时候我们需要把很多种类的实例对象，全部扔到一个集合(或者方法的参数类型)，最大的用处就是java的泛型编程，用处很大，我们把很多种类的子类实例对象全部
+扔到父类实例的集合，经过这个过程，子类实例也已经赋值给父类引用（即完成向上转型），代价是丢失子类的新建方法，java语言有个向下转型的特性，
+让我们重新获得丢失的方法，即强转回子类。
+抽象类中可以赋予非抽象方法方法的默认行为，即方法的具体实现。
+《可以用在多个接口的实现类有相同的方法：比如BaseTradingService的doeExecute(抽象方法)》
+switch case default
+}
+
+("custInfo = custInfoDao.getByProperty()")
+getTableName（）：
+	abstractDao  public abstract String getTableName（）;
+	CustInfoDaoImp extend abstractDao 实现这个方法，获取到对应的tableName
+
+
+把对象的属性和值转换成map的key和value形式：
+			Class c = this.getClass();
+			Field[] fields = c.getDeclaredFields();
+			AccessibleObject.setAccessible(fields, true);//跳过权限判断
+			for(Field f : fields){
+				String key = f.getName();
+				String value = (String)f.get(this);
+				if(value == null){
+					value = "";
+				}
+				map.put(key, value);
+			}
+
+	MemberInfo 联名卡信息记录表	
+			
+			
+			
+4.1.4 受理第三方发起押金冻结
+frozenTradingService.doExecute.callSop().exec()....
+
+*****************org.w3c.dom.NodeList接口解析XML报文*******************
+所需JAR包：javax.imageio.metadata，org.w3c.dom(xml-apis-1.4.01.jar)
+document.getElementTagName:以文档顺序返回具有给定标记名称的所有后代 Elements 的 NodeList。
+
+org.apache.commons.httpclien
+
+MultiThreadedHttpConnectionManager：管理一系列中的各种hostconfigurations httpconnections
+
+
+--------------------------------------------------------------------
+获取交易流水号：
+NUMBER_PER//每个缓存流水号的个数
+tradeNoSequence//系统流水号
+serialNoSequence//交易流水号
+
+获取交易流水号：SequenceUtil.getNextSerialNo()  getSequenceStep
+
+--------------------------------------------------------------------
+4.4 前置交易通讯报文
+前置与evcard的通讯采用HTTP连接；
+所有请求与相应都是使用UTF-8字符集进行编码（字符与字节间的双向转换）；
+前置与总行代缴费的通讯采用socket短连接。
+
+------------------------------------------------------------------
+evcard前置系统的报文格式说明：
+	根元素名为“Context”，头节点(“SysHeader”)，消息体节点（“SysBody”）
+	验签和加密：<SysSecurity> <SysSignature>
+	SysignatrueFlag(0不验签，1验签) SecurityValue(0不加密，1加密)
+
+
+------------------------------------------------------------------
+联机交易输入：
+	代发交易请求报文  交易接口说明:交易代码!^中间业务编号[固定值]!^交易日期[不送交易时间，缴费也存这个日期]!^交易流水号!^是否验签[固定值，送需要验签]!^是否验证账号信息[验证中文名，固定值，不验证]!^划扣资金!^账号类型!^账号!^客户中文名!^证件号!^证件类型!^第三方用户号[驾照号码，与身份证号码一致]!^摘要!^自定义字段1!^自定义字段2[Socket明文送报文]
+	代发交易返回报文  交易代码!^交易日期!^交易流水号!^银行方交易流水号!^柜员流水!^返回码!^返回信息
+		

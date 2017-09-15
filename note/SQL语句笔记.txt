@@ -1,0 +1,112 @@
+if EXISTS 后边括号里面返回的是true或者false
+ drop一般用于删除整体性数据 如表，模式，索引，视图，完整性限制等delete用于删除局部性数据 如表中的某一元组  DROP把表结构都删了DELETE只是把数据清掉  
+ 当你不再需要该表时， 用 drop;当你仍要保留该表，但要删除所有记录时， 用 truncate;当你要删除部分记录时（always with a WHERE clause), 用 delete.
+ create [clustered|nonclustered(聚集索引|非聚集索引)]index index-name on 表名（表中的列名(可以索引多列)DESC(降序)）：建立一个索引————建立索引的目的是加快对表中记录的查找或排序。 　　
+ 为表设置索引要付出代价的：一是增加了数据库的存储空间，二是在插入和修改数据时要花费较多的时间(因为索引也要随之变动)。SQL Server将会根据我们创建的索引，自动优化查询。
+ 聚集索引和非聚集索引的根本区别是表记录的排列顺序和与索引的排列顺序是否一致
+ 
+ insert into table-name values();
+ order by ：ORDER BY 语句用于根据指定的列对结果集进行排序。
+ 
+union 和union all:
+    在mybatis框架下，xml的配置文件下多表拼接条件查询，先union成一整个子集，再select from这个子集，然后用if判断条件，把字段拼接起来。
+	还有一个要注意的地方就是，<if>里面的查询，是对合成子集的字段进行判断，所以要拼接子集的（别名.字段）查询，不然程序识别不出来。
+    如果两个表字段的数目不对，union时可以在较少的表里面拼接一个null字段。
+
+内连接、左外连接、右外连接、交叉连接区别：     参考——http://www.cnblogs.com/Ewin/archive/2009/10/05/1578322.html  
+    两个表要做连接，就必须有个连接字段。
+	内连接——其实select * from A,B where A.Aid=B.Bnameid与Select * from A JOIN B ON A.Aid=B.Bnameid的运行结果是一样的。
+	左连接——A左连接B的记录=图3公共部分记录集C＋表A记录集A1  A左连接B，输出表A+表B和表A有相对应的拼接字段的查询结果集+没有对应的A字段表B输出为null
+	右连接——输出表B+有值拼接结果集+空拼接结果集
+	    
+	
+ varchar和nvarcher的区别，varchar(n)长度为N个字节的可变长度且非Unicode（宽字节字符集）的字符数据，nvarcher是长度为N字符长度可变的Unicode
+ nvarchar的范围更大。
+ varchar是输入字节，nvarchar是输入字符，
+ char和vaechar：固定长度和可变长度非Unicode;   nchar和nvarchar:固定和长度可变Unicode
+ 
+ prepareStatement用来执行 SQL语句，而prepareCall是执行存储过程；
+   prepareCall的返回结果集，CallableStatement对象为所有的DBMS提供一种标准形式调用已存储过程的方法。sp放在数据库中。
+   对SP的调用时CallableStatement对象所含的内容。这种调用时用一种换码方式来写的。分为带参数的结果集，不带参数的结果集。
+   {call 过程名[(?, ?, ...)]}不返回结果的带参结果集
+   {?=call 过程名（？，？）}返回结果的带参结果集
+   
+   
+   
+   select 1 from sysobjects where name：判断表是否存在
+   syscolumns 判断列是否存在
+   sysviews 判断视图是否存在
+   type的表示参数类型/U用户表，P存储过程，V是视图。
+   
+   聚集索引：该索引中键值得逻辑顺序决定了表中相应行的物理顺序，如电话薄
+   非聚集索引；顺序不同。
+   索引是快速访问数据库表中的特定信息。索引是对数据库表中一个或多个列的值进行排序的结构。
+   
+   
+   sqlserver 两种分页查询
+    在sql server2000可以通过sql server中的top+order 进行数据库分页
+    对于sqlserver2005以上，可以使用ROW_NUMBER() OVER()进行数据库分页，
+	select top页大小*
+	  from（
+	  select ROW_NUMBER() OVER (ORDER BY id)AS ROWNUMBER,*FROM table1)as A
+	  WHERE ROWNUMBER >页大小*（当前页-1）
+	  
+	  Row_number()为table1表的每一行添加一个行号，给行号这一列取名'RowNumber' 在over()方法中将'RowNumber'做了升序排列 
+	  所以RowNumber具有排序好的序列号，从0开始？
+	 检验： select  row_number() over(order by (select 1)) as rowNum from (select  * from tblCustInfo
+		where 1=1 )  tt
+		rowNum=1
+		所以rowNumber从1开始。
+		
+	  order by (select 1) 应该和 ORDER BY 1 相同的意思。即 按照 * 中的第一列 排序（asc） 
+	  
+	 左连接右连接：select (what) from table-name left join tableName on (where) 
+	 
+	 ////////  级联删除更新
+		外键的主要作用就是保持数据的完整性和一致性。所以删除更新有外键的主表时要实现级联
+		
+		SqlServer 的EXISTS的子查询只返回真值或假值，给出列名没有实际意义
+		exists的优点是：只要存在就返回了，这样的话很有可能不需要扫描整个表。  
+		in需要扫描完整个表，并返回结果。
+		
+		左连接查询时，返回的结果集，如果只想取一个表的全部字段，可以用它的别名.*，例如：select a.* from tableA a left  join tableB b on ....
+		
+		UNIQUE KEY的用途：主要是用来防止数据插入的时候重复的。
+	>>>>>MySQL的几个概念：主键，外键，索引，唯一索引:
+		主键也是一个特殊的索引。
+		外键约束主要用来维护两个表之间数据的一致性。
+		索引列的所有值都只能出现一次，即必须唯一。
+		
+		mysql如果数据不存在，则插入新数据，否则更新的实现方法
+		insert into .... on duplicate key update 
+		注意的地方:要给字段建立unique索引，不建立不起作用
+		在判断两个或以上的话，要两个字段同时不在数据库中才会做插入操作，当有其中一个改变时，执行的还是更新操作，
+		例如，如果列 a 为 主键 或 拥有UNIQUE索引，并且包含值1，则以下两个语句具有相同的效果：
+
+		INSERT INTO TABLE (a,c) VALUES (1,3) ON DUPLICATE KEY UPDATE c=c+1;
+		UPDATE TABLE SET c=c+1 WHERE a=1;
+		
+		mybatis调用mysql的存储过程（http://www.cnblogs.com/hellokitty1/p/5807392.html）
+		mapper.xml的例子：
+		 {call sp_combine_admin_group(
+3                              #{group_id1,jdbcType=INTEGER,mode=IN},
+4                              #{group_id2,jdbcType=INTEGER,mode=IN},
+5                              #{admin_user_id,jdbcType=INTEGER,mode=IN},
+6                              #{group_name,jdbcType=VARCHAR,mode=IN},
+7                              #{description,jdbcType=VARCHAR,mode=IN},
+8                              #{t_error,jdbcType=INTEGER,mode=OUT})}
+   
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   

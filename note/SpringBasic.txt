@@ -1,0 +1,181 @@
+﻿
+
+——————————————————————————————Spring随手笔记——————————————————————————————————————
+
+
+
+
+Spring的基本用法：
+
+独立于各种服务器，更好复用（允许通用任务进行集中处理），简化底层的数据库访问，高度开放，
+对于Spring框架而言，所有的Java对象都是Bean
+配置Spring的XML配置管理bean(配置bean时，class属性必须是bean实现类的完整类名（必须包含包名），不能是接口，不能是抽象类（除非有特殊配置），
+否则Spring无法使用反射创建该类的实例)
+
+依赖注入=控制反转（以配置文件来管理实例关系）(当Java对象需要调用另一个对象的方法时)
+设值注入：IOC容器使用成员变量的setter方法来注入被依赖对象；
+构造注入：IOC容器使用构造器来注入被依赖对象（被调用者调用的方法）；
+为了是springDome项目可移植，create new floder,建立一个lib文件夹，把Spring包导入。
+Spring推荐的是面向接口编程，接口定义该组件应该实现的功能，而方法功能的实现确是实例类来完成。
+ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+获取Spring配置文件.xml,需要加引号，getBean()也是
+ApplicationContext是Spring容器最常用的的接口，该接口由两个实现类：
+classPathXmlApplicationContext:类加载路径搜索
+fileSystemXmlApplicationContext:从文件系统的相对路径
+Spring框架解析<bean....>元素后可以得到字符串，<property.../>子元素通常用于作为<bean.../>元素的子元素，它驱动spring执行一次setter方法，
+name属性决定执行哪个setter方法，ref(容器中其它bean),value(传入参数是基本类型或字符串)，两个都是指定传入参数
+<property name=(首字母大写为setter的名字)设置的对象 ref="">
+<constructor-arg ref="">
+两种方式的比对：同时支持两种方式注入
+Spring归纳：
+Spring框架的本质其实就是通过XML配置来执行java代码
+调用构造器创建对象（包括工厂方法创建对象），用<bean...\>
+调用setter方法，用<property../>
+调用getter方法，用MethoodPathFatoryBean或<util:property-path：../>
+调用普通方法，用MethodRettrievingFatoryBean或<util:constant>
+获取file值，或<util:constant>
+
+
+////////////////////////////////////////////////////////////////////////
+
+
+参考文献：http://blog.csdn.net/gebitan505/article/details/44455235/
+
+建立JDBC属性文件：jdbc.propertys(文件编码修改为utf-8)
+
+建立spring-mybatis.xml配置文件：用来完成spring和mybatatis整合，描述的是自动扫入，自动注入，配置数据库
+
+log4j的配置： 为了方便调试，一般都会使用日志来输出信息，Log4j是Apache的一个开放源代码项目，通过使用Log4j，我们可以控制日志信息输送的目的地是控制台、文件、GUI组件，甚至是套接口服务器、NT的事件记录器、UNIX Syslog守护进程等；我们也可以控制每一条日志的输出格式；
+通过定义每一条日志信息的级别，我们能够更加细致地控制日志的生成过程。
+
+配置spring-mvc.xml:配置里面的注释也很详细，在此就不说了，主要是自动扫描控制器，视图模式，注解的启动这三个。
+
+配置web.xml文件：这里面对spring-mybatis.xml的引入以及配置的spring-mvc的Servlet就是为了完成SSM整合，之前2框架整合不需要在此处进行任何配置
+
+mybatis是半自动的orm框架，主要的工作就是配置Mapping映射文件:参考文献http://blog.csdn.net/tolcf/article/details/50835165
+cmd指令：Java -jar mybatis-generator-core-1.3.2.jar -configfile generatorConfig.xml -overwrite
+
+Java -jar mybatis-generator-core-1.3.1.jar -configfile generatorConfig.xml -overwrite
+
+maven：pom.xml是项目的项目对象模型（Project Object Model or POM）
+
+环境配置：http://blog.csdn.net/zhshulin/article/details/30779873
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+基于XML Schema的简化配置方式
+使用c:命名空间简化配置：c:构造器参数名=“值”-----c：构造器参数名-ref="其他Bean的id"
+包扫描的规则必须把mapper的接口和mapper的xml放在同一个包底下，并且名称一样，
+在idea中如果无法使用，可以加上@Repository这个注解)
+业务类的实现类：com.etc.srvice.impl.UserServiceImpl.java
+这里有几个注意的地方：http://www.cnblogs.com/huaixiaoz/p/5803829.html
+
+　　　　　　1.需要用@Service这个注解标识者是一个业务类
+
+　　　　　　2.需要用@Autowired或者@Resource把mapper的接口对象注入到spring中（就是如下加个注解就好）
+
+　　　　　　3.这是使用的是非注解的事物配置
+
+mybatis-config.xml配置文件就是配置数据库的链接信息：: 參考博客：http://blog.csdn.net/liuzhen917/article/details/37876727
+
+
+ 使用mybatis进行数据处理的四种方式(SqlSessionTemplate/SqlSessionDaoSupport/MapperFactoryBean/MapperScannerConfigurer)
+
+不同方式的特点
+
+    SqlSessionTemplate  这个需要写配置文件，在实现类中注入sqlsession，再使用sqlsession,是细颗粒控制
+    SqlSessionDaoSupport   这个只需要在实现类中继承特殊类就可以使用sqlsession
+    MapperFactoryBean  这个要写配置文件，把对应的所有接口在配置文件中引用即可，无需写实现类
+    MapperScannerConfigurer  这个要写配置文件，只要给出接口所在的包即可，会自动把包中的接口引入，无需写实现类
+http://www.cnblogs.com/wxisme/p/4924561.html
+http://blog.csdn.net/lemonyfei/article/details/8925325  mybatis
+
+
+
+Spirng的零配置支持：
+@competition @cotroller @service @repository(标注dao主键)
+@Reaource:spring 将这个值解释为需要被注入的bean实例的id，使用@resource与<property.../>
+Spring 4.0增强的自动装配和精确装配：@Autowired可以修饰setter方法,普通方法，实例变量，构造器。
+
+
+如何通过include标签重用mybatis的代码段：
+首先定义一个sql标签，唯一id，然后通过id引用
+<select id="selectAll">
+select 
+<include refid="Base_Column_List" />
+    from student
+</select>
+这个<include refid="Base_Column_List" />会自动把上面的代码贴过来。
+
+SpringMvc
+   一个web中可以没有web.xml文件的，也就是说，他不是必须。web.xml文件用来初始化配置信息：比如servlet，servlet-mapping，filter，listener。
+   但是SpringMVC实现的原理是通过Servlet拦截所有URL来达到控制的。
+   里面最关键的是要配置两个地方。
+   contextConfigLocation:Spring的核心就是配置文件，可以说配置文件时Spring中必不可少的东西，而这个参数就是使web与spring的配置文件箱结合的一个关键配置。
+   DispatcheServlet:包含了SpringMVC的请求逻辑，Spring使用此类拦截Web请求并进行相应的逻辑处理
+   
+
+ //////////////////////////////////////////////////////////  
+   
+————————————————————跟我学Spring笔记———————————————————————————————————————————————
+
+
+ day1
+     
+	 参考：http://stamen.iteye.com/blog/1489223/
+	 谈论耦合，目的是为了能够把一个大的模块分成几个小的模块，互相独立发展，但是之间又必须遵循一定的标准。就是他们互相调用的方式。
+     耦合，可以这样理解，当一个“元素”发生变化时，其他的“元素”如何调整才能适应这个元素的变化。这个元素可以是class，也可以是函数方法等。
+	 高耦合：高是一个形容词，形容关联关系非常密切，一个变化后其他的收到的影响非常大
+	 低耦合：就是影响的程度非常小
+	 内聚性：指的是模块内部的相互依赖程度，高内聚就是模块的内容针对干的事情少，功能越单一内聚越高。
+	         也是按职责划分组件。高内聚就是模块的内容针对的事情少，功能越单一内聚越高。
+	 
+     IOC（inversion of controller）是Spring容器的内核，对于软件来说，即是某一个接口的具体实现类的选择控制权从调用类中移除，转交给第三方。
+	 Martin Fowler提出了D（依赖注入：dependency injection）的概念用以代替IOC，即让调用类对某一接口实现类的依赖关系由第三方（容器或协作类）注入，
+	 以移除调用类对某一接口实现类的依赖。
+   依赖注入的三种方式：
+     1.构造函数注入：初始化就会注入一个，不太灵活
+	 2.属性注入：可以有选择地通过Setter方法完成调用类所需依赖注入，更加灵活方便。
+	 3.接口注入：不提倡使用
+ 
+ Spring就是这样的一个容器，它通过配置文件或注解描述类和类之间的依赖关系，自动完成类的初始化和依赖注入的工作。
+   <bean>标签主要用来进行Bean定义；
+   alias用于定义Bean别名的；
+   import用于导入其他配置文件的Bean定义，这是为了加载多个配置文件
+   bean的id可以是多个，同时指定id和name,id就是标识符，name就是别名，必须在IOC容器唯一
+   
+  <bean>的实例化
+  
+   有反转就有正转，传统应用程序是由我们自己在对象中主动控制区直接获取依赖对象，而反转则是由容器来帮忙创建即注入依赖对象，为何是反转？因为由容器帮我们查找及注入依赖对象，
+   对象只是被动的接受依赖对象，所以是反转；依赖对象的获取被反转了。
+   传统应用程序都是在类的内部主动创建依赖对象，导致类与类之间高耦合，难于测试。有了IOC容器后，把创建和查找依赖对象的控制权交给容器，由容器进行注入“组合对象”
+   所以 对象之间是松散耦合的，利于功能复用。这也是他的主要目的之一，提高组件的重用效率，
+   DI：应用程序依赖IOC容器，注入某个对象所需要的外部资源。
+   
+   
+  
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   

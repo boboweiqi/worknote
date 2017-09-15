@@ -1,0 +1,260 @@
+
+mybatis-generator.xml配置实例：可以根据数据库表，自动生成mapper,mapping ,model映射关系
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!-- 数据库驱动包位置 -->
+	<!-- <classPathEntry location="D:\software\lib\mysql-connector-java-5.1.21.jar" /> -->
+	<!--	<classPathEntry location="F:\mysql\mysql-connector-java-5.1.25-bin.jar" /> -->
+
+	 <classPathEntry location="sqljdbc4.jar" />
+	<context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<!-- 数据库链接URL、用户名、密码 -->
+		<!-- <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/sy" userId="sypro" password="sypro"> -->
+<!--
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/db_easyui" userId="root" password="root">
+		</jdbcConnection>-->
+
+			<jdbcConnection driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver" 
+			connectionURL="jdbc:sqlserver://127.0.0.1:1433;databaseName=evcard" 
+			userId="maobo"
+			password="maobo" >
+			</jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<!-- 生成模型的包名和位置 -->
+		<javaModelGenerator targetPackage="com.topcheer.evcard.model" targetProject="C:\Users\Administrator\Workspaces\MyEclipse 10\evcard\src">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<!-- 生成的映射文件包名和位置 -->
+		<sqlMapGenerator targetPackage="com.topcheer.evcard.web.dao.mapping" targetProject="C:\Users\Administrator\Workspaces\MyEclipse 10\evcard\src">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!-- 生成DAO的包名和位置 -->
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.topcheer.evcard.web.dao" targetProject="C:\Users\Administrator\Workspaces\MyEclipse 10\evcard\src">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		<!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
+		<table tableName="tblCustInfo" 
+		
+		enableCountByExample="false" enableUpdateByExample="false"
+		enableDeleteByExample="false" enableSelectByExample="false" 
+		selectByExampleQueryId="false" />
+		
+		
+	</context>
+</generatorConfiguration>
+
+Mybatis这个框架的核心价值：根据用户提供的查询参数对象，动态执行sql语句，并将结果封装为Java对象！！！
+
+    简单解释---表示查询参数的ParameterMap对象，表示sql查询结果映射关系的ResultMap列表resultMaps，当然最重要的还是执行动态sql计算和获取的SqlSource对象。
+	通过这些对象的通力合作，MappedStatement接受用户的查询参数对象，动态计算出要执行的sql语句，在数据库中执行sql语句后，再将取得的数据封装为JavaBean对象返回给用户。
+
+
+学习笔记：
+
+MyBatis 可以配置多个环境。这样SQL 映射对应多种数据库了
+
+
+///mapping映射器：这里是告诉MyBatis这里是告诉MyBatis 去哪寻找映射SQL 的语句。可以使用类路径中的资源引用，或者使用字符，输入确切的URL 引用。
+
+ 它仅仅只是关联到 map.xml 配置，配置完该别名map.xml中就不必写完整的java对象名称了。
+
+ <typeAliases> alias属性如果不写默认就是类名首字母小写基本类型及特殊类型的别名映射关系
+ 
+             <typeAlias alias="UserEntity" type="com.fengyi.entity.UserEntity" /> 
+             <typeAlias alias="StudentEntity" type="com.fengyi.entity.StudentEntity" /> 
+             <typeAlias alias="ClassEntity" type="com.fengyi.entity.ClassEntity" /> 
+           </typeAliases>
+		   
+任何一个持久层框架都是操作数据库读写数据库信息那么必然会与数据库产生瓜葛那么 
+    Hibernate  使用的 SessionFactory
+    Mybatis  的 SqlSessionFactory
+MyBatis应用程序主要都是使用SqlSessionFactory实例的，一个SqlSessionFactory实例可以通过SqlSessionFactoryBuilder获得。
+SqlSessionFactoryBuilder可以从一个mybatis-config.xml配置文件或者一个预定义的配置类的实例获得。
+
+
+/// MyBatis Generator 详解 
+   
+   mybatis是半自动ORM框架，主要是对mapping文件配置说明，mabtis自动生成插件会得到dao接口，model，mapping
+ 
+   参考博客：http://blog.csdn.net/isea533/article/details/42102297
+
+  意如果JDBC驱动不在**classpath**下，就需要通过<classPathEntry>元素引入jar包，这里**推荐**将jar包放到**classpath**
+
+    targetPackage:生成实体类存放的包名，一般就是放在该包下。实际还会受到其他配置的影响(<table>中会提到)。
+    targetProject:指定目标项目路径，使用的是文件系统的绝对路径。
+
+	
+///interceptor（拦截器）：
+
+     mybatis使用拦截机制
+
+   mybatis内部在创建几个关键对象的时候进行interceptorChain.pluginAll（obj），
+	这些对象的上层接口分别是Executor, ParameterHandler, ResultSetHandler, StatementHandler，这4个接口涵盖了了从获取参数到构造sql，再到执行sql解析结果的过程	 
+	所以可以在这个过程的任何一个地方进行拦截，只需要配置好拦截的接口及方法参数即可。
+    
+    filter配置在web.xml中，是serverlet，任何url都会拦截，至于怎么处理由开发者决定，一般用于验证登录，只要有get，post等请求，就能拦截
+	interceptor配置在action中，只会对一个或者某几个action器作用，不会对URL起作用，一般用于功能方面的验证，是否有某些权限等。
+	
+	利用拦截器实现Mybatis分页的原理：参考博客--http://blog.csdn.net/hfmbook/article/details/41985853
+	 
+	 statementhandler是具体操作jdbc statement执行数据库sql的类
+	（Statement是java执行数据库操作的一个重要接口，statement对象，用于执行不带参数的简单静态的SQL语句）
+	 
+	1.要利用JDBC对数据库进行操作时就必须有一个对应的Statement对象
+	Mybatis在执行语句前就会产生一个包含Sql语句的Statement对象。
+	2.而且对应的sql是在statement之前生成的，所以我们就可以在他生成Statement之前对用来生成Statement的SQL语句下黑手，mybatis中的Statement是通过RoutingStatement对象的prepare方法生成的。
+	3.所以利用拦截器实现mybatis分页的一个思路就是拦截StatementHandle接口的prepare方法，然后在拦截器在拦截器方法中把sql语句改成对应的分页查询sql语句，之后在调用。
+	4.对于分页而言，在拦截器里面我们还需要做的就是统计满足当前条件的记录一共有多少，这是通过获取到了原始的sql语句后，把他改为对应的统计语句再利用Mybatis封装好的参数和设置参数的功能
+	把sql语句中的参数进行替换，之后在执行查询记录数的sql语句进行总记录数的统计。
+	
+	@Signnature标记了该Interceptor只拦截的方法，
+		
+	StatementHandle有两个实现类，一个是RoutingStatementHandler，另一个是抽象类BaseStatementHandler，   
+	
+	参考：http://www.open-open.com/lib/view/open1363572227609.html
+	（在mybatis初始化阶段，主要将sql语句节点对象化为一个个MapperStatement对象）
+	MappedStatement类在Mybatis框架中用于表示XML文件中一个sql语句节点，即一个<select />、<update />或者<insert />标签。Mybatis框架在初始化阶段会对XML配置文件进行读取，
+	将其中的sql语句节点对象化为一个个MappedStatement对象
+	 
+	 SqlSource Sql源接口 ：代表从xml文件或注解映射的sql内容，主要就是用于创建BoundSql
+	 BoundSql类 ：封装mybatis最终产生sql的类，包括sql语句，参数，参数源数据等参数：
+	SqlSource接口只有一个getBoundSql(Object parameterObject)方法，返回一个BoundSql对象。一个BoundSql对象，代表了一次sql语句的实际执行，
+	而SqlSource对象的责任，就是根据传入的参数对象，动态计算出这个BoundSql，也就是说Mapper文件中的<if />节点的计算，是由SqlSource对象完成的。
+	参考：https://my.oschina.net/lichhao/blog/114311
+	
+	
+///Mybatis源码分析--返回值ResultType和ResultMap ：	
+    
+	ResultType的使用方式：
+	   ResultTye的值为实体类：  resultType："com.dao.kao.web.Student"
+
+      ResultMap的使用方式：
+	    首先要定义resultMap的对应关系，同样是先对应好实体类，然后分配个id
+		最后通过id值直接使用
+		
+	其具体实现是在DefaultResultSetHandler中，在获取每行数据时会根据resultType或者resultMap来给对象赋值，返回resultObject
+	参考博客：http://blog.csdn.net/qq924862077/article/details/53896822
+	
+	parameterType：传入参数类型
+	
+	学习笔记：
+
+Mybatis是支持定制化SQL,存储过程以及高级映射的优秀的持久化框架。mybatis避免了几乎所有的	JDBC代码和手工设置参数以及抽取结果集。
+Mybatis使用简单的XML或注解来配置和映射基本体，将接口和java的pojo映射成数据库中的记录。
+Mybatis是iBatis的升级版。
+OGNL（对象图导航语言）是object-graph Navigation Language的缩写，它是一种功能强大的表达式语言，通过它简单一致的表达式语法，可以存取对象的任意属性，调用对象的方法，遍历整个对象的结构图，实现字段类型转化等功能。
+
+Mybatis的优点同样是mybatis的缺点：
+
+1、编写SQL语句时工作量很大，尤其是字段多、关联表多时，更是如此。 
+2、SQL语句依赖于数据库，导致数据库移植性差，不能更换数据库。
+3、框架还是比较简陋，功能尚有缺失，虽然简化了数据绑定代码，但是整个底层数据库查询实际还是要自己写的，工作量也比较大，而且不太容易适应快速数据库修改。
+4、二级缓存机制不佳
+
+5、优势对比
+
+Mybatis优势
+
+    MyBatis可以进行更为细致的SQL优化，可以减少查询字段。
+    MyBatis容易掌握，而Hibernate门槛较高。
+
+Hibernate优势
+
+    Hibernate的DAO层开发比MyBatis简单，Mybatis需要维护SQL和结果映射。
+    Hibernate对对象的维护和缓存要比MyBatis好，对增删改查的对象的维护要方便。
+    Hibernate数据库移植性很好，MyBatis的数据库移植性不好，不同的数据库需要写不同SQL。
+    Hibernate有更好的二级缓存机制，可以使用第三方缓存。MyBatis本身提供的缓存机制不佳。
+  
+
+
+
+///mapping映射器：这里是告诉MyBatis这里是告诉MyBatis 去哪寻找映射SQL 的语句。可以使用类路径中的资源引用，或者使用字符，输入确切的URL 引用。
+
+它仅仅只是关联到 map.xml 配置，配置完该别名map.xml中就不必写完整的java对象名称了。
+
+<typeAliases> alias属性如果不写默认就是类名首字母小写基本类型及特殊类型的别名映射关系
+ 
+             <typeAlias alias="UserEntity" type="com.fengyi.entity.UserEntity" /> 
+             <typeAlias alias="StudentEntity" type="com.fengyi.entity.StudentEntity" /> 
+             <typeAlias alias="ClassEntity" type="com.fengyi.entity.ClassEntity" /> 
+           </typeAliases>
+		   
+任何一个持久层框架都是操作数据库读写数据库信息那么必然会与数据库产生瓜葛那么 
+    Hibernate  使用的 SessionFactory
+    Mybatis  的 SqlSessionFactory
+MyBatis应用程序主要都是使用SqlSessionFactory实例的，一个SqlSessionFactory实例可以通过SqlSessionFactoryBuilder获得。
+SqlSessionFactoryBuilder可以从一个mybatis-config.xml配置文件或者一个预定义的配置类的实例获得。
+
+
+/// MyBatis Generator 详解 
+   
+   mybatis是半自动ORM框架，主要是对mapping文件配置说明，mabtis自动生成插件会得到dao接口，model，mapping
+ 
+   参考博客：http://blog.csdn.net/isea533/article/details/42102297
+
+  意如果JDBC驱动不在**classpath**下，就需要通过<classPathEntry>元素引入jar包，这里**推荐**将jar包放到**classpath**
+
+    targetPackage:生成实体类存放的包名，一般就是放在该包下。实际还会受到其他配置的影响(<table>中会提到)。
+    targetProject:指定目标项目路径，使用的是文件系统的绝对路径。
+
+	mybatis下@param的使用：
+    在mybatis@param的XML中是如下这样引用变量的//是通过参数名来引用的
+	而在Spring中是根据参数的顺序来取值，并且从0开始。
+	
+	<参考于：http://www.360doc.com/content/12/1019/11/7471983_242389480.shtml>
+Mybatis XML 文件的详解
+     cache-配置给定命名空间的缓存
+	 resultMap-用来描述如何从数据库结果集中来加载你的对象
+	 sql-可以重用的SQL快，也可以被其他语句引用
+	 
+	 注意参数注释：#{id} 这就告诉MyBatis创建一个预处理语句参数。使用JDBC，这样的一个参数在SQL中会由一个“？”来标识，并被传递到一个新的预处理语句中，
+	 like://Similar JDBC code,NOT MyBatis ... String selectPerson="SELECT * FROM PERSON WHERE ID="?";
+	        preparedStatement ps = conn.prepareStatement(selectPerson);ps.setInt(1,id);
+	 
+	 SQL:这个元素可以用来定义可重用的sql代码段，可以包含在其他语句中。
+	 <sql id="userColumns">id,username,password</sql>
+	 <select ...>select<include refid="userColumns"> from some_table where id = #{id}</select>
+	 <include>用来调用sql代码段
+	 
+	 mybatis的其他部分，参数可以指定一个确定的数据类型。//#{property，javaType jdbcType=VARCHAR}.javaType应该是被确定为保证使用正确类型处理器你。
+	 使用类型别名，就不用输入类的全路径。如：
+	 <typeAlias type"com.dao.User" alias="User"/>
+	 
+	 这样一个简单的语句作用域所有列被自动映射到HashMap的建上，这由reultType属性指定。但是HashMap不能很好的描述一个领域模型。那样
+	 你的应用程序将会使用JavaBean或POJO（普通的java对象）来座位领域模型。
+	 <select paramterType="int" resulType="HashType">....</se>
+	 JavaBean:
+	    一堆get和set,一一对应属性
+	这样，在select语句会精确匹配到列名，就可以把JavaBean可以映射到结果集中。所以resultType选定相对路径，对应好javaBean,这些情况下，mybatis会
+    在幕后自动创建UI个ResultMap，基于属性名字来映射列到JavaBean的属性上。
+	  
+	高级结果映射：
+	   <resultMap>
+	   <id >
+	   <result>  注入到字段或JavaBean属性的普通结果。//id和result都映射一个单独列的值到简单数据类型。不同的是id表示的结果将是当比较对象实例时用到的标识属性。这帮助来改进整体表现，特别是缓存和嵌入结果映射。
+	   //property 映射到列结果的字段或属性。如果匹配的是存在的，和给定相同的JavaBean的属性，那么就会使用。否则Mybatis将会寻找给定proterty的字段。
+	     columns 从数据库得到的列名，
+	   
+	   
+	   </resultMap>
+	   
+	   <trim>标签的使用：
+	      有点类似于replace效果
+		  prefix:前覆盖并
+		  suffix:后覆盖并增加其内容
+		  prefixOverrides:前缀判断条件
+		  suffixOverrides:后缀判断条件
+
+		  mapper.xml配置文件下，sql语句拼接的if判断语句，模糊查询like的通配符笔记：
+		  %,_单字符通配，escape针对的是要查询的字符里面包括通配符，select username from gg_user where username like '%xiao/_%' escape '/';   
+		  理解为通过“/”来对其中关键字进行转义。
+		  

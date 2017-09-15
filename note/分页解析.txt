@@ -1,0 +1,102 @@
+js渲染：paginationConfig（datagriList：要渲染的id）--》加载系统配置文件设置列表loadList--》
+        onBeforeRefresh,onSelectReflse                 getFormJson(serilizeArray,extend)返回result
+                                                      刷新refreshDatagrid
+		                                                
+
+
+
+
+getPage方法：返回分页（pager）对象。
+pagination插件的事件：onSelectPage，当用户选择新的页面时触发，回调函数包含两个参数（pagesize，pageNumber)
+                      onBeforeRefresh,刷新按钮点击之前触发
+
+
+					 
+网页刷新流程：JSP从上至下的读取，CSS->JS(POST ,AJAX)->【filter】Controller->service->dao(mybatis)【interceptor】->database->>jsp
+					 
+js方法：
+
+if（object），当对象为undefined时，判断通过，也可参考typeof。
+
+$.extend（）多用来编写插件，可以重载原型，就是对jQuery的源码扩展。
+
+extend（result，item1，item2...）这个方法主要用来合并，将所有参数都合并到result中，并返回result，会破坏result的结构。
+
+serialize()
+jQuery中，当我们使用ajax时，常常需要拼装input数据以键值对（Key/Value）的形式发送到服务器，可以用这个方法来把数据格式化
+用JQuery的serialize方法可以轻松的完成这个工作，使用这个方法可以将表单序列化为键值对（key1=value1&&key2=value2…）后提交。
+serialize()方法就会返回一个string值，如FirstName=Bill&LastName=Gates 
+
+serializeArray()
+同上，但serializeArray()的方法就会返回一个json值
+注意：form里面的name不能够用 Js、jquery里的关键字（如form1，可以写为Myform）
+
+遇到问题：request.getParameterMap()怎么获取到page和rows这个两个属性
+$(searchP).attr('page', pageNumber);
+	$(searchP).attr('rows', rows);
+	var url = $('#' + datagridId).datagrid("options").url;
+	if (isEmpty(url)||'#'==url) {
+		url = searchUrl;
+	}
+	$.post(url, searchP, function(response) {
+
+前端获得的两个属性，放到seacherP里面，通过$.post提交到相对的URL，request就包含了这个数组。
+
+>>>>>>>最终参考：http://blog.csdn.net/abcd898989/article/details/51261163
+
+///////////拦截器的基本结构interceptor//////// 
+public class PageInterceptor implements Interceptor{  
+      
+    /* (non-Javadoc) 
+     * 拦截器要执行的方法 
+     */  
+    public Object intercept(Invocation invocation) throws Throwable {  
+        //...  
+    }  
+  
+   
+      /* (non-Javadoc) 
+         * 拦截器需要拦截的对象，target。this，当前类的实例 
+         */  
+        public Object plugin(Object target) {  
+            return Plugin.wrap(target, this);  
+        }  
+  
+    /* (non-Javadoc) 
+     * 设置初始化的属性值 
+     */  
+    public void setProperties(Properties properties) {  
+        //...  
+    }  
+  
+}  
+
+
+
+\\\\\\\\\\\\　过滤器和拦截器的区别：
+
+　　①拦截器是基于Java的反射机制的，而过滤器是基于函数回调。
+　　②拦截器不依赖与servlet容器，过滤器依赖与servlet容器。
+　　③拦截器只能对action请求起作用，而过滤器则可以对几乎所有的请求起作用。
+　　④拦截器可以访问action上下文、值栈里的对象，而过滤器不能访问。
+　　⑤在action的生命周期中，拦截器可以多次被调用，而过滤器只能在容器初始化时被调用一次。
+　　⑥拦截器可以获取IOC容器中的各个bean，而过滤器就不行，这点很重要，在拦截器里注入一个service，可以调用业务逻辑。
+     
+	 过滤器实现filter接口时的获到的参数是ServletRequest,而不是HttpServletRequest 是因为它在到达servlet（jsp）之前工作，获取不到servlet容器里面的对象，可以获取到web.xml的对象。
+	 
+////////////mybatis 实现分页
+
+物理分页——只从数据库中查询当前页的数据。
+不同数据库的提供的分页操作
+mysql  ：       limit
+
+SQL service： top   row_number over
+top 100 percent
+oracle：         rownum 
+
+\\\\\\\\\\\\ 遇到问题：
+  不知道JXPathContext这个类的selectSingleNode(xpath)怎么获取到page的数组对象。
+  拦截器中interceptor方法返回的obj值，返回给谁？
+  
+  js中的attr（）方法，可以获取元素值，也可以设置元素的属性。
+ 

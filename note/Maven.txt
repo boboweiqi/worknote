@@ -1,0 +1,20 @@
+http://blog.sina.com.cn/s/blog_4f925fc30102ed5q.html
+\\\\\\\\\\\\\\Pom.xml文件配置
+groundId:项目唯一组标志
+artifactId:项目的通用名称
+version：项目版本
+packging:打包机制
+classfier：分类
+
+
+build 设置
+    主要用于编译设置，包括两个主要的元素，build和report
+  build
+    主要分为两部分，基本元素和扩展元素集合
+<budlid>
+
+    extensions: true or false，是否装载插件扩展。默认false
+    inherited: true or false，是否此插件配置将会应用于poms，那些继承于此的项目
+    configuration: 指定插件配置
+    dependencies: 插件需要依赖的包
+    executions: 用于配置execution目标，一个插件可以有多个目标。
