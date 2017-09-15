@@ -1,0 +1,258 @@
+基于javascript语言和V8引擎的开源web服务器项目，在node环境下，通过模块化javascript代码，加上函数式编程，无需考虑浏览器兼容问题，
+直接使用ES6 标准
+
+
+
+闭包：
+	//	创建一个立即执行的匿名函数
+	(function(x){
+		return x*x;
+	})(3);
+
+	
+	
+WebSocket是HTML5新增的协议，他的目的是在浏览器和服务器之间建立一个不受限制的双向通信的管道；
+	websocket不是全新的协议，而是利用http来建立连接的；
+	
+	
+------------------------------------------------------------------------------------------------------------------
+
+mkdir 创建工作区
+cd  选中工作区的当前路径
+pwd 显示当前路径
+
+git init 产生.git版本库 (里面有state暂存区和默认分支master等)这步很关键
+git add 保存到暂存区
+git commit 提交到master
+git checkout oringin dev:master 提交到远程数据库的分支上
+
+git reset --hard HEAD^ 回退上一个版本  HEAD^^回退到上上个
+
+git commit -a 已经跟踪过的文件 提交可以跳过git add 
+---------------------------------------------------------------------------------------------------------------------------
+nodejs的模板引擎
+	jade	和 		EJS
+	
+	EJS不支持模板继承
+	
+	
+Jade 源于Node.js的HTML模板引擎，它是javascript实现的，并且可以提供Node使用
+
+	
+res.render做了什么
+	常规路由函数中，初始的http服务器处理句柄中传入的原始req和res何时被express自动包装，提供诸如res.send(),res.json等方法调用？
+	render方法有两种写法，如果函数没有回调函数，express框架自动给你添加一个渲染完成没有错误自动将渲染后的HTML返回浏览器的回调函数，render(view,opts,done)view依旧是模板路径，opts是渲染该模板的传入的参数，最后的done就是回调函数；
+	
+	Express中的app.locals对面字面量，在app.locals这个对象字面量中定义的键值对，是可以直接在模板中使用的
+	
+	express不对Node.js已有的特性进行二次抽象，我们只是在它之上扩展了Web应用所需的基本功能
+	
+	package.json 上面代码定义了项目的名称，描述，版本等，并指定需要的Express的版本，项目的配置文件
+	app.route上传文件
+	
+	中间件(middleware)就是HTTP请求的函数。
+	use是express调用中间件的方法，它返回一个函数4
+
+	设置环境变量set
+	set用于指定变量的值
+	app.set('view engine','ejs')//使用ejs作为模板
+	
+	res.render()渲染网页模板render，即把变换内容加载到网页
+	
+	app.js主要包括http的创建，基本路由，监听的端口号
+	
+	app.use(express.static('public'))指定静态网页目录
+	
+--------------------------------------------------------------------------------------
+nodejs开发 express路由与中间件     		//http://www.cnblogs.com/zapple/p/5683016.html
+路由表
+	http://host[:port][path]
+	
+	app.get()调用，实际上就为我们的网站添加了一条路由，指定“/”这个路径由get的第二个参数所代表的函数来处理。
+	express对象可以针对常见的HTTP方法指定路由，使用下面的方法
+
+	使用express构建Web服务器时，很重要的一部分工作就是决定怎么响应针对某个路径的请求，也即路由处理。	最直接的路由配置方法，就是调用app.get()、app.post()一条一条的配置，不过对于需要处理大量路由的网站来讲，这会搞出人命来的。所以呢，我们实际开发中需要结合路由参数（query string、正则表达式、自定义的参数、post参数）来减小工作量提高可维护性。
+	
+中间件	
+	Express里有个中间件（middleware）的概念。所谓中间件，就是在收到请求后和发送响应之前这个阶段执行的一些函数。
+	要在一条路由的处理链上插入中间件，可以使用express对象的use方法。
+	Express提供了一个static中间件，可以用来处理网站里的静态文件的GET请求，可以通过express.static访问。
+	
+	express.static(root, [options])	第一个参数root，是要处理的静态资源的根目录，可以是绝对路径，也可以是相对路径。第二个可选参数用来指定一些选项
+	
+	__dirname是Node.js的全局变量，指向当前运行的js脚本所在的目录。path.join()则用来拼接目录。
+	
+	
+Router
+	Express还提供了一个叫做Router的对象，行为很像中间件，你可以把Router直接传递给app.use，像使用中间件那样使用Router。另外你还可以使用router来处理针对GET、POST等的路由，也可以用它来添加中间件，总之你可以将Router看作一个微缩版的app
+	
+	定义了router后，也可以将其作为中间件传递给app.use：app.use('/events', router);
+
+路由模块
+	index.js 和  user.js
+	index.js创建了一个Router实例，然后调用router.get为“/”路径应用了路由函数。最后呢使用module.exports将Router对象导出。
+
+模块
+	前面分析index.js时看到了module.exports的用法。module.exports用来导出一个Node.js模块内的对象，调用者使用require加载模块时，就会获得导出的对象的实例。
+	
+	
+	
+--------------------------------------------------------------------------------------------------------------------------
+	bootstrap框架样式集成 样式的复制方法
+	.container
+	  .row
+	
+	
+	jade模板引擎，一个tab的表示层级包含关系。层级之间缩进的重要性。
+	
+	
+  mongoose对Mongodb进行建模
+  Mongoose的三个概念：Scheme模式,Model模型,Documents文档
+  
+	
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin git@github.com:boboweiqi/test.git
+git push -u origin master
+	
+	
+ git错误failed to push some refs to git 
+ GitHub远程仓库中的README.md文件不在本地仓库中
+ $ git pull --rebase origin master
+ $ git push -f origin master
+	
+	
+----------------------------------------------------------------------------------------------------------
+node 调试
+node—inspector模块，用浏览器调试
+
+CommonJS规范：
+1.模块的定义
+2.模块的引用
+	//模块自带的部分
+		var exports = {}
+		var module ={
+		exports:exports 
+		}
+		
+		return modules.exports
+3.模块的标识	
+	require('模块标识')
+	1.是符合'小驼峰'命名法的字符串
+	2.以'.'或'..'开头相对路径模块（相对当前目录的引入）
+	3.绝对路径（例如/war/www等绝对路径）
+	
+nodejs开发
+	1.模块路径分析(path+filename)
+	2.模块定位
+	3.模块编译
+	
+	文件定位，模块标识里并不包含文件名，因为扩展名可以省略，在Nodejs中，省略了扩展名的文件，会依次补充上.js,.node,.json来尝试。
+	
+	
+ES6 Modules规范
+	ES6是语言层面的，导入导出是声明式的代码集合，意思就是直接利用关键字声明导入/导出一个模块啦，而不是粗鄙的将一个对象赋值给一个变量
+	import 
+	export
+	default关键字，它的作用就是将一个数据命名为default.(impo * as 数据别名)
+	
+	聚合模块
+	export * from './bar'
+	
+	
+前端自动化工具 ——— Grunt
+	grunt作为一个前端构建工具，有资源压缩，代码检查，文件合并等功能
+	grunt是基于nodejs环境、
+	要保证grunt命令可以用，需要先安装CLI  npm install grunt-cli -g
+	npm install grunt --dev-save  后面的参数表示将此grunt支持添加到package.json里头
+	grunt-contrib-uglify --save-dev  js代码压缩(htnlmin,cssmin)
+
+	
+promise和ES6    
+Async/Await 应该是目前最简单的异步方案了
+async 表示这是一个async函数，await只能用在这个函数里面
+await 表示在这里 等待promise返回结果了，再继续执行
+
+Babel预编译器
+
+如果express代表callback异步的话，koa代码generator/yield，async/await（类协程，本质上还是callback，语法糖而已），最终替代他们肯定是类似fibjs那中的没有显式异步的异步，异步过程对普通程序员来说是透明的，跟写同步程序一样的。
+
+ES6 -新增关键字let，const
+本来js是没有块级作用域的，用var定义的变量会被提升，不能用于循环变量中
+let定义的变量只能作用于块级作用域中，不会被提升
+
+const是常量关键字，专门用来声明一个常量
+ 特点：不可修改，块级作用域，不存在变量提升必须先声明后使用，不可重复声明同一个变量
+ 
+ 
+ 
+
+
+nodejs是如何接受和解析http协议的？？？http://cnodejs.org/topic/5725a25f3f27a7c841bcb82e
+1.下层的传输层通常使用的是 TCP 协议，所以 net.Server 类正是 http.Server 类的父类。具体的 HTTP 相关的部分，是通过监听 net.Server 类实例的 connection 事件封装的：
+	
+------------------------------------------------------------------------------------------------------------
+Jade是haml的javascript实现
+
+	include ./includes/header //引入的头文件（共享内容块。）
+		.container
+			block content  //占位符
+		block script
+
+
+
+在jade中确认相对路径无误后，仍然找不到文件，就是中间件的静态资源配置有问题
+app.use(express.static(path.join(__dirname,'public')))//静态资源的获取
+
+不同的框架，都需要判断读取静态资源的方式是怎么样的来排查相对路径无法获取资源问题。
+------------------------------------------------------------------------------------------------------------
+
+URL 
+	parse转对象
+	
+querystring
+	stringify  序列化
+	反序列化
+	
+	
+	
+	chrome搜索自身DNS缓存
+	读取本地的HOST文件
+	浏览器最后发起一个DNS的一个系统调用
+	
+	EventEmitter   事件驱动
+	
+	HTTP源码解读
+		作用域
+		上下文 this指向拥有者，只能函数内部使用。
+		
+		
+		
+
+		var pet =  {
+				name:'pp'
+				speak:function(){
+				console.log(this.name)
+				}
+		}
+		
+		pet.speak()
+-------------------------------------------------------------------------------------------------------- 
+
+Apache ab  性能测试
+
+
+
+事件模块
+	 events 多事件监听、
+	 
+
+	 
+pipe
+	 
+
+
+
+
+

@@ -1,0 +1,3 @@
+git remote -v 查看远程仓库
+git fetch origin  master：temp 从远程获取最新版本到本地
+git diff temp本地仓库与下载的temp分支
